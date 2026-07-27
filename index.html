@@ -140,8 +140,8 @@
 
   <!-- AUTO FETCH -->
   <section class="panel">
-    <h2>⚡ プロラインから自動取込 <span id="srcBadge" class="src manual">手入力</span></h2>
-    <p class="sub">毎朝、広告用アカウントの数字が自動で入ります。初回だけ取込先URLと合言葉を設定してね（この端末だけに保存・非公開）。</p>
+    <h2>⚡ 自動取込（プロライン＋Meta広告） <span id="srcBadge" class="src manual">手入力</span></h2>
+    <p class="sub">毎朝、広告費・表示・クリック・登録・動画完走・予約が自動で入ります（プロライン＋Meta広告 両方）。初回だけ合言葉を設定してね（この端末だけに保存・非公開）。</p>
     <div class="grid">
       <div class="fld" style="grid-column:1/-1"><label>取込先URL <span class="u">GASのウェブアプリURL</span></label><input id="gasUrl" type="text" placeholder="https://script.google.com/macros/s/.../exec"></div>
       <div class="fld" style="grid-column:1/-1"><label>合言葉（トークン） <span class="u">GASのsetupで発行される</span></label><input id="gasToken" type="text" placeholder="RELAY_TOKEN"></div>
@@ -153,17 +153,19 @@
     </div>
   </section>
 
-  <!-- CSV貼り付け -->
+  <!-- CSV貼り付け（バックアップ・普段は畳んでおく） -->
   <section class="panel">
-    <h2>📋 Meta広告CSVを貼るだけ <span class="tag">手入力いらず</span></h2>
-    <p class="sub">広告マネージャでダウンロードしたCSVを、下の枠にそのまま貼って「反映」。広告費・表示・クリック・媒体CVが自動で入ります。</p>
-    <textarea id="csvBox" placeholder="ここにCSVを貼り付け（Cmd+V / Ctrl+V）。1行目が見出し行のCSVならそのままでOK。"></textarea>
-    <div class="row-actions">
-      <button class="btn-main" id="btnCsv">CSVを反映</button>
-      <button class="btn-sub" id="btnCsvClear">枠を空にする</button>
-      <span id="csvMsg" style="font-size:12px;color:var(--muted);align-self:center"></span>
-    </div>
-    <div id="csvMap"></div>
+    <details>
+      <summary style="cursor:pointer;font-size:14px;font-weight:700;color:var(--navy);list-style:none">🧰 手動CSV取込（自動が止まった時用・普段は不要）</summary>
+      <p class="sub" style="margin-top:10px">Meta広告は自動取込に切り替え済み。もし自動が止まった時だけ、広告マネージャのCSVをここに貼って「反映」。</p>
+      <textarea id="csvBox" placeholder="ここにCSVを貼り付け（Cmd+V / Ctrl+V）。1行目が見出し行のCSVならそのままでOK。"></textarea>
+      <div class="row-actions">
+        <button class="btn-main" id="btnCsv">CSVを反映</button>
+        <button class="btn-sub" id="btnCsvClear">枠を空にする</button>
+        <span id="csvMsg" style="font-size:12px;color:var(--muted);align-self:center"></span>
+      </div>
+      <div id="csvMap"></div>
+    </details>
   </section>
 
   <!-- INPUT -->
