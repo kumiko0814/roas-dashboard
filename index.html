@@ -59,6 +59,14 @@
   .sig .stg{font-size:11px; color:var(--muted); flex:1; min-width:0}
   .sig .rt{font-size:13px; font-weight:800; color:var(--navy)}
   @media(max-width:520px){.sig .stg{display:none}}
+  .crv{display:flex; gap:12px; align-items:center; border:1px solid var(--line); border-radius:12px; padding:10px; margin-bottom:8px; background:#fff}
+  .crv img{width:58px; height:58px; object-fit:cover; border-radius:8px; flex:none; background:#EEF3F8}
+  .crv .info{flex:1; min-width:0}
+  .crv .nm{font-size:12.5px; font-weight:700; color:var(--navy2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .crv .st{font-size:11.5px; color:var(--muted); margin-top:3px}
+  .crv .st b{color:var(--navy)}
+  .rank{font-size:10.5px; font-weight:700; padding:2px 8px; border-radius:20px; margin-left:6px}
+  .rank.win{background:var(--good-soft); color:var(--good)} .rank.lose{background:var(--bad-soft); color:var(--bad)}
   .grouphd{grid-column:1/-1; font-size:11.5px; font-weight:700; color:var(--navy2); border-bottom:1px solid var(--line); padding:6px 0 4px; margin-top:4px}
   .row-actions{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px}
   button{font:inherit; cursor:pointer; border:none; border-radius:10px; padding:10px 16px; font-size:13.5px; font-weight:600}
@@ -235,6 +243,13 @@
     <div id="culprit"></div>
     <div id="signals"></div>
     <p class="hint">🟢クリア／🟡あと一歩／🔴要改善／⚪️数字待ち　※目安値は業界水準＋過去実績ベース（一部推測）。実データが溜まるほど精度が上がります。</p>
+  </section>
+
+  <!-- クリエイティブ別 -->
+  <section class="panel">
+    <h2>🖼️ どのバナーが効いてる？ <span class="tag">画像つき</span></h2>
+    <p class="sub">Meta広告のバナー別成績（自動取込）。<b>登録が多い＝勝ち</b>。CTRだけ高くて登録が少ないのは母数不足に注意。</p>
+    <div id="creativesBox"><p class="hint">自動取込すると、バナー画像と成績（登録・CTR・CPC）が並びます。</p></div>
   </section>
 
   <!-- Bottleneck -->
@@ -570,6 +585,23 @@
     el('csvMap').innerHTML=mapHtml?'<div class="hint">認識した列：'+mapHtml+'</div>':'<div class="hint">見出し行の列名：'+p.header.slice(0,10).join(' / ')+'</div>';
   }
 
+  // ---- クリエイティブ別（画像つき）----
+  function renderCreatives(list){
+    var box=el('creativesBox'); if(!box) return;
+    if(!list||!list.length) return;
+    var sorted=list.slice().sort(function(a,b){return (b.cv||0)-(a.cv||0)||(b.ctr||0)-(a.ctr||0);});
+    var maxCv=0; sorted.forEach(function(c){if((c.cv||0)>maxCv)maxCv=c.cv||0;});
+    box.innerHTML=sorted.map(function(c,i){
+      var rank='';
+      if(maxCv>0&&(c.cv||0)===maxCv) rank='<span class="rank win">勝ち</span>';
+      else if(i===sorted.length-1) rank='<span class="rank lose">最下位</span>';
+      var img=c.thumb?('<img src="'+c.thumb+'" alt="" referrerpolicy="no-referrer">'):'<img alt="">';
+      var spend=(c.spend||0).toLocaleString('ja-JP');
+      return '<div class="crv">'+img+'<div class="info"><div class="nm">'+(c.name||'—')+rank+'</div>'
+        +'<div class="st">登録 <b>'+(c.cv||0)+'</b> ／ CTR <b>'+(c.ctr||0)+'%</b> ／ CPC ¥'+(c.cpc||0)+' ／ 消化 ¥'+spend+'</div></div></div>';
+    }).join('');
+  }
+
   // ---- glossary render ----
   function renderGlossary(){
     function block(arr){return arr.map(function(t){
@@ -598,6 +630,7 @@
     var map={month:'month',cost:'cost',imp:'imp',clicks:'ct',ct:'ct',media_cv:'cv',cv:'cv',reg:'reg',v1:'v1',v2:'v2',v3:'v3',book:'book',meet:'meet',win:'win',price:'price'};
     Object.keys(map).forEach(function(k){if(d[k]!=null&&d[k]!=='')inp(map[k]).value=d[k];});
     render();
+    renderCreatives(d.creatives);
     el('srcBadge').className='src auto';el('srcBadge').textContent='自動取込';
   }
   function fetchLatest(){
