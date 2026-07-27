@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>あなたの特典締切｜Merone</title>
+<style>
+  :root{
+    --bg:#F5E6EA; --card:#ffffff; --navy:#1B2A4A; --navy2:#2E4A6B;
+    --blue:#5B8AC0; --pink:#D9A5B3; --pink-deep:#C98598; --ink:#22303F; --muted:#7C8A99;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","游ゴシック体","Yu Gothic",YuGothic,"Segoe UI",sans-serif;
+    background:linear-gradient(160deg,#EAF2F8,#F5E6EA); color:var(--ink); line-height:1.7;
+    min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px 16px;
+    -webkit-text-size-adjust:100%;
+  }
+  .card{
+    background:var(--card); border-radius:22px; box-shadow:0 8px 30px rgba(27,42,74,.12);
+    max-width:420px; width:100%; padding:30px 24px 28px; text-align:center; border:1px solid #EAD9DF;
+  }
+  .greet{font-size:14px; color:var(--navy2); margin:0 0 4px}
+  .lead{font-size:15px; color:var(--muted); margin:0 0 18px}
+  .lbl{font-size:12px; color:var(--pink-deep); font-weight:700; letter-spacing:.08em; margin:0 0 6px}
+  .deadline{font-size:26px; font-weight:800; color:var(--navy); line-height:1.35; margin:0 0 2px}
+  .deadline .time{font-size:17px; color:var(--navy2)}
+  .cd{display:flex; gap:8px; justify-content:center; margin:20px 0 8px}
+  .cd .u{background:linear-gradient(160deg,#EAF2F8,#DCE9F4); border-radius:14px; padding:12px 4px; min-width:66px}
+  .cd .n{font-size:28px; font-weight:800; color:var(--navy)}
+  .cd .k{font-size:11px; color:var(--muted); margin-top:2px}
+  .note{font-size:13px; color:var(--navy2); margin:16px 0 0}
+  .ended{font-size:20px; font-weight:800; color:var(--pink-deep)}
+  .ended-sub{font-size:13px; color:var(--muted); margin-top:6px}
+  .heart{color:var(--pink)}
+  #err{display:none; font-size:12px; color:var(--muted); margin-top:14px}
+</style>
+</head>
+<body>
+  <div class="card" id="card">
+    <p class="greet" id="greet"></p>
+    <p class="lead">特典のお受け取りは、こちらの日時までです☺️</p>
+    <div id="live">
+      <div class="lbl">あなたの締切</div>
+      <div class="deadline" id="dl">—</div>
+      <div class="cd" id="cd"></div>
+      <p class="note" id="note">この日までに、カリキュラムのクリアと面談予約をお済ませくださいね<span class="heart">♡</span></p>
+    </div>
+    <div id="ended" style="display:none">
+      <div class="ended">受付は終了しました</div>
+      <div class="ended-sub">また次のご案内でお会いできたら嬉しいです<span class="heart">♡</span></div>
+    </div>
+    <div id="err"></div>
+  </div>
+
+<script>
+(function(){
+  "use strict";
+  function qp(k){try{return new URLSearchParams(location.search).get(k);}catch(e){return null;}}
+  function showErr(m){try{var e=document.getElementById('err');e.style.display='block';e.textContent=m;}catch(x){}}
+
+  // ---- パラメータ ----
+  // d=起点日時(登録日時) / days=有効日数(既定5) / deadline=締切を直接指定(あれば優先)
+  // end=daylast(その日の23:59・既定) or exact(起点時刻+days日) / name=名前
+  var name=qp('name'); var days=parseInt(qp('days')||'5',10); if(!isFinite(days))days=5;
+  var endMode=(qp('end')||'daylast'); var WD=['日','月','火','水','木','金','土'];
+
+  function parseDT(s){
+    if(!s) return null;
+    s=decodeURIComponent(s).trim();
+    if(/^\d{10,13}$/.test(s)){ var n=parseInt(s,10); if(s.length===10)n*=1000; var d=new Date(n); return isNaN(d)?null:d; }
+    // 区切りを正規化: 2026/06/01 21:19 / 2026-06-01T21:19 / 2026.06.01 21時19分 等
+    var t=s.replace(/年|\./g,'-').replace(/月/g,'-').replace(/日/g,' ').replace(/時/g,':').replace(/分/g,'').replace(/\//g,'-');
+    t=t.replace(/\s+/g,' ').trim().replace(' ','T');
+    var d=new Date(t); if(!isNaN(d))return d;
+    d=new Date(s); return isNaN(d)?null:d;
+  }
+
+  var deadline=parseDT(qp('deadline'));
+  if(!deadline){
+    var base=parseDT(qp('d'));
+    if(base){
+      deadline=new Date(base.getTime()+days*24*60*60*1000);
+      if(endMode!=='exact'){ deadline.setHours(23,59,0,0); }
+    }
+  }
+
+  function fmtDate(d){ return (d.getMonth()+1)+'月'+d.getDate()+'日('+WD[d.getDay()]+')'; }
+  function fmtTime(d){ var h=d.getHours(),m=d.getMinutes(); return (h<10?'0':'')+h+':'+(m<10?'0':'')+m; }
+
+  function boot(){
+    try{
+      if(name) document.getElementById('greet').textContent=name+'さん';
+      if(!deadline){
+        // パラメータ未設定でも画面は壊さない（案内文のみ）
+        document.getElementById('dl').textContent='まもなくご案内します';
+        document.getElementById('cd').style.display='none';
+        showErr('（締切パラメータ未設定：?d=登録日時 または ?deadline=締切 を付けてください）');
+        return;
+      }
+      document.getElementById('dl').innerHTML=fmtDate(deadline)+'<br><span class="time">'+fmtTime(deadline)+' まで</span>';
+      var cd=document.getElementById('cd');
+      function tick(){
+        var diff=deadline.getTime()-Date.now();
+        if(diff<=0){
+          document.getElementById('live').style.display='none';
+          document.getElementById('ended').style.display='block';
+          clearInterval(timer); return;
+        }
+        var s=Math.floor(diff/1000);
+        var dd=Math.floor(s/86400); s-=dd*86400;
+        var hh=Math.floor(s/3600); s-=hh*3600;
+        var mm=Math.floor(s/60); var ss=s-mm*60;
+        function u(n,k){return '<div class="u"><div class="n">'+n+'</div><div class="k">'+k+'</div></div>';}
+        cd.innerHTML=u(dd,'日')+u(hh,'時間')+u(mm,'分')+u(ss,'秒');
+      }
+      tick(); var timer=setInterval(tick,1000);
+    }catch(e){ showErr('表示エラー: '+e.message); }
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
+})();
+</script>
+</body>
+</html>
