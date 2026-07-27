@@ -35,6 +35,13 @@
   .fld .u{font-size:10.5px; color:var(--muted); font-weight:400}
   .fld input{font:inherit; font-size:15px; padding:9px 10px; border:1.5px solid var(--line); border-radius:9px; background:#FBFDFF; color:var(--ink); width:100%}
   .fld input:focus{outline:none; border-color:var(--blue); background:#fff}
+  textarea#csvBox{width:100%; min-height:92px; font:inherit; font-size:12.5px; padding:10px; border:1.5px solid var(--line); border-radius:9px; background:#FBFDFF; resize:vertical; color:var(--ink)}
+  textarea#csvBox:focus{outline:none; border-color:var(--blue); background:#fff}
+  .fstep{border:1px solid var(--line); border-radius:12px; padding:10px 12px; margin:0 0 8px; background:#fff}
+  .fstep .hd{display:flex; justify-content:space-between; align-items:center}
+  .fstep .nm{font-size:12.5px; font-weight:700; color:var(--navy2)}
+  .fstep .rt{font-size:14px; font-weight:800; color:var(--navy)}
+  .fstep .rt small{font-size:10.5px; color:var(--bad); font-weight:700; margin-left:4px}
   .grouphd{grid-column:1/-1; font-size:11.5px; font-weight:700; color:var(--navy2); border-bottom:1px solid var(--line); padding:6px 0 4px; margin-top:4px}
   .row-actions{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px}
   button{font:inherit; cursor:pointer; border:none; border-radius:10px; padding:10px 16px; font-size:13.5px; font-weight:600}
@@ -124,6 +131,19 @@
     </div>
   </section>
 
+  <!-- CSV貼り付け -->
+  <section class="panel">
+    <h2>📋 Meta広告CSVを貼るだけ <span class="tag">手入力いらず</span></h2>
+    <p class="sub">広告マネージャでダウンロードしたCSVを、下の枠にそのまま貼って「反映」。広告費・表示・クリック・媒体CVが自動で入ります。</p>
+    <textarea id="csvBox" placeholder="ここにCSVを貼り付け（Cmd+V / Ctrl+V）。1行目が見出し行のCSVならそのままでOK。"></textarea>
+    <div class="row-actions">
+      <button class="btn-main" id="btnCsv">CSVを反映</button>
+      <button class="btn-sub" id="btnCsvClear">枠を空にする</button>
+      <span id="csvMsg" style="font-size:12px;color:var(--muted);align-self:center"></span>
+    </div>
+    <div id="csvMap"></div>
+  </section>
+
   <!-- INPUT -->
   <section class="panel">
     <h2>① 数字を入れる <span class="tag">入れた瞬間に自動更新</span></h2>
@@ -175,6 +195,13 @@
   <section class="panel">
     <h2>③ ファネルの数字</h2>
     <div class="kpis" id="funnelKpis"></div>
+  </section>
+
+  <!-- ファネル進行率 -->
+  <section class="panel">
+    <h2>③.5 ファネル進行率 <span class="tag">どこでこぼれてる？</span></h2>
+    <p class="sub">登録から成約までの各段階の通過率。一番低い所が"穴"（最小と表示）。</p>
+    <div id="funnelSteps"></div>
   </section>
 
   <!-- Bottleneck -->
@@ -349,6 +376,8 @@
       card('動画③完走率',pct(m.v3rate),'登録→動画3完走',null)
     ].join('');
 
+    renderFunnel(m);
+
     el('levers').innerHTML=
       leverRow('① 実CPA（集客効率・広告担当）',yen(m.cpa),'¥3,300以下','cpa',m)
       +leverRow('② 面談到達率（温度・ナーチャリング）',pct(m.reach),(isFinite(m.needReachIdeal)?pct(m.needReachIdeal):'—')+'以上','reach',m)
@@ -379,6 +408,59 @@
     el('goalseek').innerHTML=gs;
 
     saveInputs();
+  }
+
+  // ---- ファネル進行率 ----
+  function renderFunnel(m){
+    var steps=[
+      ['登録 → 動画①完走', div(num('v1'),num('reg'))*100],
+      ['動画① → 動画②完走', div(num('v2'),num('v1'))*100],
+      ['動画② → 動画③完走', div(num('v3'),num('v2'))*100],
+      ['動画③ → 面談予約', div(num('book'),num('v3'))*100],
+      ['面談予約 → 面談実施', div(num('meet'),num('book'))*100],
+      ['面談実施 → 成約', div(num('win'),num('meet'))*100]
+    ];
+    var valid=steps.filter(function(s){return isFinite(s[1]);});
+    var minv=valid.length?Math.min.apply(null,valid.map(function(s){return s[1];})):null;
+    el('funnelSteps').innerHTML=steps.map(function(s){
+      var v=s[1],has=isFinite(v);
+      var cls=!has?'':(v===minv?'bad':(v>=60?'good':'warn'));
+      var w=has?Math.min(100,Math.max(0,v)):0;
+      return '<div class="fstep"><div class="hd"><span class="nm">'+s[0]+'</span>'
+        +'<span class="rt">'+(has?v.toFixed(1)+'%':'—')+(has&&v===minv?'<small>最小</small>':'')+'</span></div>'
+        +'<div class="bar"><i class="'+cls+'" style="width:'+w+'%"></i></div></div>';
+    }).join('');
+  }
+
+  // ---- Meta広告CSV パーサ ----
+  function splitRow(l){var o=[],c='',q=false;for(var i=0;i<l.length;i++){var ch=l[i];if(ch==='"'){q=!q;}else if(ch===','&&!q){o.push(c);c='';}else c+=ch;}o.push(c);return o.map(function(s){return s.trim().replace(/^"|"$/g,'');});}
+  function num2(s){var v=parseFloat(String(s).replace(/[^0-9.\-]/g,''));return isFinite(v)?v:0;}
+  function parseCSV(text){
+    var lines=text.replace(/﻿/g,'').trim().split(/\r?\n/).filter(function(l){return l.trim();});
+    if(lines.length<2)return null;
+    return {header:splitRow(lines[0]),rows:lines.slice(1).map(splitRow)};
+  }
+  function applyCsv(){
+    var p=parseCSV(el('csvBox').value);
+    if(!p){el('csvMsg').textContent='CSVが読めませんでした（見出し行＋データ行が必要）';return;}
+    var pat={cost:/広告費|消化|使った|amount.?spent|spend|費用|コスト|金額/i,
+             imp:/インプレッション|表示回数|impress/i,
+             ct:/リンク.?クリック|link.?click|クリック(?!率|.?単価|.?スルー)|(^|[^a-z])clicks?([^a-z]|$)/i,
+             cv:/結果|コンバージョン|results?|conversion|購入|リード|登録|友だち/i};
+    var idx={};
+    Object.keys(pat).forEach(function(k){for(var i=0;i<p.header.length;i++){if(pat[k].test(p.header[i])){idx[k]=i;break;}}});
+    var sum={cost:0,imp:0,ct:0,cv:0},found=false;
+    p.rows.forEach(function(r){Object.keys(idx).forEach(function(k){sum[k]+=num2(r[idx[k]]);found=true;});});
+    var applied=[];
+    if(idx.cost!=null){inp('cost').value=Math.round(sum.cost);applied.push('広告費');}
+    if(idx.imp!=null){inp('imp').value=Math.round(sum.imp);applied.push('表示');}
+    if(idx.ct!=null){inp('ct').value=Math.round(sum.ct);applied.push('クリック');}
+    if(idx.cv!=null){inp('cv').value=Math.round(sum.cv);applied.push('媒体CV');}
+    render();
+    var jp={cost:'広告費',imp:'表示',ct:'クリック',cv:'媒体CV'};
+    var mapHtml=Object.keys(idx).map(function(k){return jp[k]+'←「'+p.header[idx[k]]+'」';}).join(' ／ ');
+    el('csvMsg').textContent=applied.length?('反映：'+applied.join('・')+'（'+p.rows.length+'行を合計）'):'列を自動認識できず。見出しの列名を教えてくれれば合わせます';
+    el('csvMap').innerHTML=mapHtml?'<div class="hint">認識した列：'+mapHtml+'</div>':'<div class="hint">見出し行の列名：'+p.header.slice(0,10).join(' / ')+'</div>';
   }
 
   // ---- glossary render ----
@@ -436,6 +518,8 @@
   function bind(){
     FIELDS.forEach(function(f){inp(f).addEventListener('input',render);});
     el('btnFetch').addEventListener('click',fetchLatest);
+    el('btnCsv').addEventListener('click',applyCsv);
+    el('btnCsvClear').addEventListener('click',function(){el('csvBox').value='';el('csvMsg').textContent='';el('csvMap').innerHTML='';});
     el('btnSaveConn').addEventListener('click',function(){saveConn();el('fetchMsg').textContent='設定を保存しました';});
     el('btnSave').addEventListener('click',saveSnapshot);
     el('btnClear').addEventListener('click',function(){if(!confirm('入力欄を空にします（履歴は残ります）。よろしいですか？'))return;FIELDS.forEach(function(f){inp(f).value='';});el('srcBadge').className='src manual';el('srcBadge').textContent='手入力';render();});
