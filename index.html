@@ -42,6 +42,23 @@
   .fstep .nm{font-size:12.5px; font-weight:700; color:var(--navy2)}
   .fstep .rt{font-size:14px; font-weight:800; color:var(--navy)}
   .fstep .rt small{font-size:10.5px; color:var(--bad); font-weight:700; margin-left:4px}
+  .culprit{border-radius:14px; padding:16px; margin:0 0 12px; border:1px solid}
+  .culprit.bad{background:var(--bad-soft); border-color:#E7C9D1}
+  .culprit.warn{background:var(--warn-soft); border-color:#EAD9B0}
+  .culprit.good{background:var(--good-soft); border-color:#B9DDD3}
+  .culprit .lbl{font-size:11px; font-weight:700; letter-spacing:.06em}
+  .culprit.bad .lbl{color:var(--bad)} .culprit.warn .lbl{color:var(--warn)} .culprit.good .lbl{color:var(--good)}
+  .culprit .nm{font-size:22px; font-weight:800; color:var(--navy); margin:3px 0 6px}
+  .culprit .dsc{font-size:13px; color:var(--ink)}
+  .culprit .fix{font-size:12.5px; margin-top:9px; padding:9px 11px; background:#fff; border-radius:9px; color:var(--navy2)}
+  .culprit .fix b{color:var(--navy)}
+  .sig{display:flex; align-items:center; gap:9px; padding:9px 11px; border:1px solid var(--line); border-radius:10px; margin-bottom:7px; background:#fff}
+  .sig .dot{width:12px; height:12px; border-radius:50%; flex:none}
+  .sig .dot.good{background:var(--good)} .sig .dot.warn{background:var(--warn)} .sig .dot.bad{background:var(--bad)} .sig .dot.na{background:#C9D2DC}
+  .sig .part{font-size:12.5px; font-weight:700; color:var(--navy2); flex:none; width:104px}
+  .sig .stg{font-size:11px; color:var(--muted); flex:1; min-width:0}
+  .sig .rt{font-size:13px; font-weight:800; color:var(--navy)}
+  @media(max-width:520px){.sig .stg{display:none}}
   .grouphd{grid-column:1/-1; font-size:11.5px; font-weight:700; color:var(--navy2); border-bottom:1px solid var(--line); padding:6px 0 4px; margin-top:4px}
   .row-actions{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px}
   button{font:inherit; cursor:pointer; border:none; border-radius:10px; padding:10px 16px; font-size:13.5px; font-weight:600}
@@ -204,9 +221,18 @@
     <div id="funnelSteps"></div>
   </section>
 
+  <!-- 犯人特定 -->
+  <section class="panel">
+    <h2>🔍 犯人はどこ？ <span class="tag">バナー？LP？プロライン？</span></h2>
+    <p class="sub">広告→登録→面談→成約を「担当パーツ」ごとに信号で判定。<b>上から見て最初に赤くなる所が主犯</b>です（そこが詰まると下流に人が回らないため）。</p>
+    <div id="culprit"></div>
+    <div id="signals"></div>
+    <p class="hint">🟢クリア／🟡あと一歩／🔴要改善／⚪️数字待ち　※目安値は業界水準＋過去実績ベース（一部推測）。実データが溜まるほど精度が上がります。</p>
+  </section>
+
   <!-- Bottleneck -->
   <div id="bottleneck" class="bottleneck" style="display:none">
-    <div class="lbl">最優先で直すのはここ</div>
+    <div class="lbl">最優先で直すのはここ（3大レバー）</div>
     <div class="nm" id="bnName">—</div>
     <div class="dsc" id="bnDesc">—</div>
   </div>
@@ -377,6 +403,7 @@
     ].join('');
 
     renderFunnel(m);
+    renderCulprit(m);
 
     el('levers').innerHTML=
       leverRow('① 実CPA（集客効率・広告担当）',yen(m.cpa),'¥3,300以下','cpa',m)
@@ -408,6 +435,62 @@
     el('goalseek').innerHTML=gs;
 
     saveInputs();
+  }
+
+  // ---- 犯人特定（各段階→担当パーツ→信号判定）----
+  var STAGES=[
+    {part:'バナー',stg:'表示→クリック（CTR）',calc:function(m){return m.ctr;},good:1.5,warn:1.0,
+     diag:'広告のバナー・動画の"つかみ"が弱く、見た人がクリックしていません。',
+     fix:'勝ちクリエイティブ(banner025/movie006)に寄せる。25〜34歳の安価CPA層へ配分。訴求（悩み→ベネフィット）を変えてA/Bテスト。'},
+    {part:'LP（記事）',stg:'クリック→登録（CVR）',calc:function(m){return m.cvr;},good:15,warn:8,
+     diag:'クリックはされるのに、LP（記事）で登録まで至っていません。LPの説得力不足です。',
+     fix:'記事LPのファーストビュー（見出し・つかみ）を改善。オファーを明確化。LPのhttps化を確認。'},
+    {part:'プロライン入口',stg:'登録→動画①完走',calc:function(m){return div(num('v1'),num('reg'))*100;},good:50,warn:30,
+     diag:'登録した人が最初の動画にすら入れていません。アンケートで止まる・動画が重い・温度ゼロが原因。',
+     fix:'アンケートを後ろにずらす。1本目を短尺化。感想提出をスタンプに軽量化。広告は「なぜメルカリか」の橋渡しを1本目に。'},
+    {part:'プロライン動画',stg:'動画①→③完走',calc:function(m){return div(num('v3'),num('v1'))*100;},good:60,warn:40,
+     diag:'見始めた人が最後まで完走していません。動画の中身・順番・尺の問題。',
+     fix:'生徒事例を前に、仕入れ（重い実務）を後ろに。1本の尺を短く。マインドセットを差し込む。'},
+    {part:'誘導（締切）',stg:'動画③→面談予約',calc:function(m){return div(num('book'),num('v3'))*100;},good:15,warn:8,
+     diag:'動画は見たのに面談予約に進んでいません。オファーと締切が弱い。',
+     fix:'「◯月◯日までに予約で特典」の締切を切る。生徒の声（社会的証明）を差し込む。予約ハードルを下げる。'},
+    {part:'リマインド',stg:'面談予約→実施',calc:function(m){return div(num('meet'),num('book'))*100;},good:65,warn:45,
+     diag:'予約したのに面談に来ていません（着座率が低い）。リマインドが薄い。',
+     fix:'予約後リマインドを複数通（前日夜・当日朝）復元。日程変更の導線を用意（無断キャンセル警告はNG）。'},
+    {part:'クローザー',stg:'面談実施→成約',calc:function(m){return m.closeRate;},good:50,warn:40,
+     diag:'面談まで来て決まっていません。クロージングの問題（通常はこのフローの強み）。',
+     fix:'面談台本を標準化。録画をレビューして「何で決まって／決まらないか」を言語化。'}
+  ];
+  function sigClass(v,g,w){ if(!isFinite(v))return'na'; return v>=g?'good':(v>=w?'warn':'bad'); }
+  function renderCulprit(m){
+    var rows=STAGES.map(function(s){var v=s.calc(m);return {s:s,v:v,cls:sigClass(v,s.good,s.warn)};});
+    var culprit=null,pending=null;
+    for(var i=0;i<rows.length;i++){
+      if(rows[i].cls==='na'){ pending=rows[i]; break; }   // 上流がデータ待ち→そこで判定保留
+      if(rows[i].cls==='bad'){ culprit=rows[i]; break; }  // 上から最初のbadが主犯
+    }
+    var warnFirst=null; for(var j=0;j<rows.length;j++){ if(rows[j].cls==='warn'){ warnFirst=rows[j]; break; } }
+    var box;
+    if(culprit){
+      box='<div class="culprit bad"><div class="lbl">主犯（一番の弱点）</div><div class="nm">🔴 '+culprit.s.part+'</div>'
+        +'<div class="dsc">'+culprit.s.diag+'（'+culprit.s.stg+'：<b>'+culprit.v.toFixed(1)+'%</b>／目安 '+culprit.s.good+'%）</div>'
+        +'<div class="fix"><b>次の一手：</b>'+culprit.s.fix+'</div></div>';
+    }else if(pending){
+      box='<div class="culprit warn"><div class="lbl">まだ判定できない</div><div class="nm">⚪️ '+pending.s.part+'から先はデータ待ち</div>'
+        +'<div class="dsc">'+pending.s.stg+'の数字が未入力です。ここが埋まるまで、下流（面談・成約）は正しく判定できません。まず数字を入れてね。</div></div>';
+    }else if(warnFirst){
+      box='<div class="culprit warn"><div class="lbl">要注意（あと一歩）</div><div class="nm">🟡 '+warnFirst.s.part+'</div>'
+        +'<div class="dsc">'+warnFirst.s.diag+'（'+warnFirst.s.stg+'：<b>'+warnFirst.v.toFixed(1)+'%</b>／目安 '+warnFirst.s.good+'%）</div>'
+        +'<div class="fix"><b>次の一手：</b>'+warnFirst.s.fix+'</div></div>';
+    }else{
+      box='<div class="culprit good"><div class="lbl">大きな弱点なし</div><div class="nm">🟢 各パーツ健全</div>'
+        +'<div class="dsc">全段階が目安をクリア。母数（広告費）を保ったまま横に伸ばす段階です。</div></div>';
+    }
+    el('culprit').innerHTML=box;
+    el('signals').innerHTML=rows.map(function(r){
+      return '<div class="sig"><span class="dot '+r.cls+'"></span><span class="part">'+r.s.part+'</span>'
+        +'<span class="stg">'+r.s.stg+'</span><span class="rt">'+(isFinite(r.v)?r.v.toFixed(1)+'%':'—')+'</span></div>';
+    }).join('');
   }
 
   // ---- ファネル進行率 ----
