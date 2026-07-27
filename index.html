@@ -79,6 +79,11 @@
   .kpi .v{font-size:20px; font-weight:800; color:var(--navy); margin-top:2px}
   .kpi .t{font-size:10.5px; color:var(--muted); margin-top:2px}
   .kpi .q{display:inline-flex; align-items:center; justify-content:center; width:15px; height:15px; border-radius:50%; background:var(--blue-soft); color:var(--navy2); font-size:10px; font-weight:700; cursor:help; flex:none}
+  .kpi.good{border-left:4px solid var(--good)}
+  .kpi.warn{border-left:4px solid var(--warn)}
+  .kpi.bad{border-left:4px solid var(--bad); background:var(--bad-soft)}
+  .kpi.bad .v{color:var(--bad)}
+  .kpi.warn .v{color:var(--warn)}
 
   .lever{border:1px solid var(--line); border-radius:12px; padding:12px 13px; margin:0 0 10px; background:#fff}
   .lever .hd{display:flex; justify-content:space-between; align-items:center; gap:10px}
@@ -341,9 +346,16 @@
     return m;
   }
 
-  function card(label,val,note,tipKey){
+  function card(label,val,note,tipKey,status){
     var q=tipKey?' <span class="q" data-tip="'+tipKey+'">?</span>':'';
-    return '<div class="kpi"><div class="k">'+label+q+'</div><div class="v">'+val+'</div><div class="t">'+note+'</div></div>';
+    var cls=status?(' '+status):'';
+    return '<div class="kpi'+cls+'"><div class="k">'+label+q+'</div><div class="v">'+val+'</div><div class="t">'+note+'</div></div>';
+  }
+  // 指標の良し悪し判定：dir='low'=安いほど良い／'high'=高いほど良い
+  function judge(v,good,warn,dir){
+    if(!isFinite(v))return'';
+    if(dir==='low')return v<=good?'good':(v<=warn?'warn':'bad');
+    return v>=good?'good':(v>=warn?'warn':'bad');
   }
   function statusFor(kind,m){
     if(kind==='cpa'){var c=m.cpa;if(!isFinite(c)||m.reg===0)return{cls:'na',label:'データ待ち',ratio:0};
@@ -381,25 +393,26 @@
     }else{el('vRoas').innerHTML='ROAS —';el('vLine').textContent='広告費・LINE登録実数・成約・単価を入れると、ここに結果が出ます。';}
 
     el('mediaKpis').innerHTML=[
-      card('CPM',yen(m.cpm),'表示1,000回の費用','CPM'),
-      card('CTR',pct(m.ctr,2),'クリック率','CTR'),
-      card('CPC',yen(m.cpc),'1クリック単価','CPC'),
-      card('CVR',pct(m.cvr,2),'クリック→登録','CVR'),
-      card('媒体CPA',yen(m.mediaCpa),'管理画面基準','媒体CPA'),
-      card('実CPA',yen(m.cpa),'プロライン実数基準','実CPA'),
-      card('流入率',pct(m.ryunyu),'登録実数÷媒体CV',null),
-      card('目標CPA',yen(TARGET_CPA),'ここまで下げたい','実CPA')
+      card('CPM',yen(m.cpm),'表示1,000回の費用','CPM', judge(m.cpm,2000,3500,'low')),
+      card('CTR',pct(m.ctr,2),'クリック率','CTR', judge(m.ctr,1.5,1.0,'high')),
+      card('CPC',yen(m.cpc),'1クリック単価','CPC', judge(m.cpc,100,200,'low')),
+      card('CVR',pct(m.cvr,2),'クリック→登録','CVR', judge(m.cvr,15,8,'high')),
+      card('媒体CPA',yen(m.mediaCpa),'管理画面基準','媒体CPA', judge(m.mediaCpa,1700,3000,'low')),
+      card('実CPA',yen(m.cpa),'プロライン実数基準','実CPA', judge(m.cpa,3300,4000,'low')),
+      card('流入率',pct(m.ryunyu),'登録実数÷媒体CV',null, judge(m.ryunyu,55,40,'high')),
+      card('目標CPA',yen(TARGET_CPA),'ここまで下げたい','実CPA','')
     ].join('');
 
+    var reachCls=statusFor('reach',m); reachCls=(reachCls&&reachCls.cls!=='na')?reachCls.cls:'';
     el('funnelKpis').innerHTML=[
-      card('登録',isFinite(m.reg)&&m.reg?m.reg.toLocaleString():'—','LINE登録実数',null),
-      card('面談到達率',pct(m.reach),'登録→面談実施','面談到達率'),
-      card('面談成約率',pct(m.closeRate),'面談→成約','面談成約率'),
-      card('流入→成約率',pct(m.flowWin,2),'登録→成約','流入→成約率'),
-      card('CPO',yen(m.cpo),'成約1件の広告費','CPO'),
-      card('売上(試算)',yen(m.sales),'成約×単価',null),
-      card('目標CPO',yen(m.cpoTarget),'ROAS'+Math.round(m.troas)+'%の分岐点','CPO'),
-      card('動画③完走率',pct(m.v3rate),'登録→動画3完走',null)
+      card('登録',isFinite(m.reg)&&m.reg?m.reg.toLocaleString():'—','LINE登録実数',null,''),
+      card('面談到達率',pct(m.reach),'登録→面談実施','面談到達率', reachCls),
+      card('面談成約率',pct(m.closeRate),'面談→成約','面談成約率', judge(m.closeRate,50,40,'high')),
+      card('流入→成約率',pct(m.flowWin,2),'登録→成約','流入→成約率', judge(m.flowWin,3.06,2.0,'high')),
+      card('CPO',yen(m.cpo),'成約1件の広告費','CPO', judge(m.cpo,m.cpoTarget,m.cpoTarget*1.5,'low')),
+      card('売上(試算)',yen(m.sales),'成約×単価',null,''),
+      card('目標CPO',yen(m.cpoTarget),'ROAS'+Math.round(m.troas)+'%の分岐点','CPO',''),
+      card('動画③完走率',pct(m.v3rate),'登録→動画3完走',null, judge(m.v3rate,50,30,'high'))
     ].join('');
 
     renderFunnel(m);
