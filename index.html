@@ -149,8 +149,9 @@
 
   <!-- AUTO FETCH -->
   <section class="panel">
-    <h2>⚡ 自動取込（プロライン＋Meta広告） <span id="srcBadge" class="src manual">手入力</span></h2>
-    <p class="sub">毎朝、広告費・表示・クリック・登録・動画完走・予約が自動で入ります（プロライン＋Meta広告 両方）。初回だけ合言葉を設定してね（この端末だけに保存・非公開）。</p>
+    <details>
+      <summary style="cursor:pointer;list-style:none;font-size:15px;font-weight:700;color:var(--navy)">⚡ 自動取込 <span id="srcBadge" class="src manual">手入力</span> <span style="font-size:11.5px;color:var(--muted);font-weight:400">（設定済み・毎朝自動。開くと設定/手動更新）</span></summary>
+    <p class="sub" style="margin-top:10px">毎朝、広告費・表示・クリック・登録・動画完走・予約が自動で入ります（プロライン＋Meta広告 両方）。初回だけ合言葉を設定してね（この端末だけに保存・非公開）。</p>
     <div class="grid">
       <div class="fld" style="grid-column:1/-1"><label>取込先URL <span class="u">GASのウェブアプリURL</span></label><input id="gasUrl" type="text" placeholder="https://script.google.com/macros/s/.../exec"></div>
       <div class="fld" style="grid-column:1/-1"><label>合言葉（トークン） <span class="u">GASのsetupで発行される</span></label><input id="gasToken" type="text" placeholder="RELAY_TOKEN"></div>
@@ -160,6 +161,7 @@
       <button class="btn-sub" id="btnSaveConn">設定を保存</button>
       <span id="fetchMsg" style="font-size:12px;color:var(--muted);align-self:center"></span>
     </div>
+    </details>
   </section>
 
   <!-- CSV貼り付け（バックアップ・普段は畳んでおく） -->
