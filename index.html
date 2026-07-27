@@ -17,65 +17,52 @@
   html,body{margin:0;padding:0}
   body{
     font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","游ゴシック体","Yu Gothic",YuGothic,"Segoe UI",sans-serif;
-    background:var(--bg); color:var(--ink); line-height:1.7;
-    -webkit-text-size-adjust:100%; padding:0 0 60px;
+    background:var(--bg); color:var(--ink); line-height:1.7; -webkit-text-size-adjust:100%; padding:0 0 60px;
   }
-  header.top{
-    background:linear-gradient(135deg,var(--navy),var(--navy2)); color:#fff;
-    padding:22px 20px 18px; text-align:center;
-  }
+  header.top{background:linear-gradient(135deg,var(--navy),var(--navy2)); color:#fff; padding:22px 20px 18px; text-align:center;}
   header.top h1{font-size:19px; margin:0 0 4px; letter-spacing:.02em}
   header.top p{margin:0; font-size:12.5px; color:#C9D7E8}
-  .wrap{max-width:920px; margin:0 auto; padding:18px 14px 0}
+  .wrap{max-width:960px; margin:0 auto; padding:18px 14px 0}
   .panel{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:18px 16px; margin:0 0 16px}
-  .panel h2{font-size:15px; margin:0 0 4px; color:var(--navy); display:flex; align-items:center; gap:8px}
+  .panel h2{font-size:15px; margin:0 0 4px; color:var(--navy); display:flex; align-items:center; gap:8px; flex-wrap:wrap}
   .panel .sub{font-size:12px; color:var(--muted); margin:0 0 14px}
   .tag{display:inline-block; font-size:11px; background:var(--blue-soft); color:var(--navy2); border-radius:20px; padding:2px 10px; font-weight:600}
 
-  /* input grid */
   .grid{display:grid; grid-template-columns:repeat(2,1fr); gap:10px 12px}
   @media(min-width:640px){.grid{grid-template-columns:repeat(3,1fr)}}
   .fld{display:flex; flex-direction:column; gap:3px}
   .fld label{font-size:12px; color:var(--navy2); font-weight:600}
   .fld .u{font-size:10.5px; color:var(--muted); font-weight:400}
-  .fld input{
-    font:inherit; font-size:15px; padding:9px 10px; border:1.5px solid var(--line);
-    border-radius:9px; background:#FBFDFF; color:var(--ink); width:100%;
-  }
+  .fld input{font:inherit; font-size:15px; padding:9px 10px; border:1.5px solid var(--line); border-radius:9px; background:#FBFDFF; color:var(--ink); width:100%}
   .fld input:focus{outline:none; border-color:var(--blue); background:#fff}
+  .grouphd{grid-column:1/-1; font-size:11.5px; font-weight:700; color:var(--navy2); border-bottom:1px solid var(--line); padding:6px 0 4px; margin-top:4px}
   .row-actions{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px}
   button{font:inherit; cursor:pointer; border:none; border-radius:10px; padding:10px 16px; font-size:13.5px; font-weight:600}
   .btn-main{background:var(--navy); color:#fff}
   .btn-sub{background:#fff; color:var(--navy2); border:1.5px solid var(--line)}
   .btn-pink{background:var(--pink); color:#fff}
 
-  /* verdict banner */
   .verdict{border-radius:var(--radius); padding:16px 16px; margin:0 0 16px; border:1px solid var(--line)}
   .verdict.hit{background:var(--good-soft); border-color:#B9DDD3}
   .verdict.miss{background:var(--pink-soft); border-color:#E7C9D1}
-  .verdict .big{font-size:26px; font-weight:800; color:var(--navy); letter-spacing:.01em}
-  .verdict .big small{font-size:13px; font-weight:600; color:var(--muted); margin-left:6px}
-  .verdict .line{font-size:13.5px; margin-top:6px; color:var(--ink)}
+  .verdict .big{font-size:26px; font-weight:800; color:var(--navy)}
+  .verdict .line{font-size:13.5px; margin-top:6px}
 
-  /* KPI cards */
   .kpis{display:grid; grid-template-columns:repeat(2,1fr); gap:10px}
   @media(min-width:640px){.kpis{grid-template-columns:repeat(4,1fr)}}
-  .kpi{background:#fff; border:1px solid var(--line); border-radius:12px; padding:11px 12px}
-  .kpi .k{font-size:11px; color:var(--muted)}
+  .kpi{background:#fff; border:1px solid var(--line); border-radius:12px; padding:11px 12px; position:relative}
+  .kpi .k{font-size:11px; color:var(--muted); display:flex; align-items:center; gap:4px}
   .kpi .v{font-size:20px; font-weight:800; color:var(--navy); margin-top:2px}
   .kpi .t{font-size:10.5px; color:var(--muted); margin-top:2px}
+  .kpi .q{display:inline-flex; align-items:center; justify-content:center; width:15px; height:15px; border-radius:50%; background:var(--blue-soft); color:var(--navy2); font-size:10px; font-weight:700; cursor:help; flex:none}
 
-  /* funnel / lever rows */
   .lever{border:1px solid var(--line); border-radius:12px; padding:12px 13px; margin:0 0 10px; background:#fff}
   .lever .hd{display:flex; justify-content:space-between; align-items:center; gap:10px}
   .lever .nm{font-size:13.5px; font-weight:700; color:var(--navy2)}
   .lever .st{font-size:11.5px; font-weight:700; padding:3px 10px; border-radius:20px; white-space:nowrap}
-  .st.good{background:var(--good-soft); color:var(--good)}
-  .st.warn{background:var(--warn-soft); color:var(--warn)}
-  .st.bad{background:var(--bad-soft); color:var(--bad)}
-  .st.na{background:#EEF2F6; color:var(--muted)}
-  .lever .nums{font-size:12.5px; color:var(--ink); margin-top:6px}
-  .lever .nums b{color:var(--navy)}
+  .st.good{background:var(--good-soft); color:var(--good)} .st.warn{background:var(--warn-soft); color:var(--warn)}
+  .st.bad{background:var(--bad-soft); color:var(--bad)} .st.na{background:#EEF2F6; color:var(--muted)}
+  .lever .nums{font-size:12.5px; margin-top:6px} .lever .nums b{color:var(--navy)}
   .bar{height:8px; border-radius:6px; background:#EEF3F8; margin-top:8px; overflow:hidden}
   .bar>i{display:block; height:100%; border-radius:6px; background:var(--blue)}
   .bar>i.good{background:var(--good)} .bar>i.warn{background:var(--warn)} .bar>i.bad{background:var(--bad)}
@@ -94,9 +81,22 @@
   .hist-wrap{overflow-x:auto}
   .hint{font-size:11.5px; color:var(--muted); margin-top:8px; line-height:1.6}
   .foot{text-align:center; font-size:11px; color:var(--muted); margin:8px 0 0}
-  #errbox{display:none; background:var(--bad-soft); color:var(--bad); border:1px solid #E7C9D1; border-radius:10px; padding:10px 12px; font-size:12px; margin:0 14px 14px; max-width:920px; }
-  @media(min-width:948px){#errbox{margin-left:auto;margin-right:auto}}
+  #errbox{display:none; background:var(--bad-soft); color:var(--bad); border:1px solid #E7C9D1; border-radius:10px; padding:10px 12px; font-size:12px; margin:0 14px 14px; max-width:960px}
   .lock{font-size:11.5px; color:var(--muted); background:#fff; border:1px dashed var(--line); border-radius:10px; padding:9px 12px; margin-top:12px}
+
+  details.glossary{border:1px solid var(--line); border-radius:12px; background:#fff; padding:0 14px}
+  details.glossary summary{font-size:14px; font-weight:700; color:var(--navy); padding:13px 0; cursor:pointer; list-style:none}
+  details.glossary summary::-webkit-details-marker{display:none}
+  details.glossary summary::before{content:"▸ "; color:var(--pink)}
+  details.glossary[open] summary::before{content:"▾ "}
+  .term{border-top:1px solid var(--line); padding:11px 0}
+  .term .h{font-size:13px; font-weight:700; color:var(--navy2)}
+  .term .h b{color:var(--pink)}
+  .term .d{font-size:12.5px; color:var(--ink); margin-top:3px}
+  .term .e{font-size:11.5px; color:var(--muted); margin-top:3px}
+  #tip{position:fixed; z-index:99; max-width:260px; background:var(--navy); color:#fff; font-size:11.5px; line-height:1.5; padding:9px 11px; border-radius:9px; box-shadow:0 4px 16px rgba(0,0,0,.25); display:none}
+  .src{font-size:11px; padding:2px 8px; border-radius:20px; font-weight:600}
+  .src.auto{background:var(--good-soft); color:var(--good)} .src.manual{background:#EEF2F6; color:var(--muted)}
 </style>
 </head>
 <body>
@@ -104,24 +104,44 @@
   <h1>ROAS 500% 診断ダッシュボード</h1>
   <p>数字を入れるだけ・今のボトルネックと次の一手を自動診断</p>
 </header>
-
 <div id="errbox"></div>
+<div id="tip"></div>
 
 <div class="wrap">
+
+  <!-- AUTO FETCH -->
+  <section class="panel">
+    <h2>⚡ プロラインから自動取込 <span id="srcBadge" class="src manual">手入力</span></h2>
+    <p class="sub">毎朝、広告用アカウントの数字が自動で入ります。初回だけ取込先URLと合言葉を設定してね（この端末だけに保存・非公開）。</p>
+    <div class="grid">
+      <div class="fld" style="grid-column:1/-1"><label>取込先URL <span class="u">GASのウェブアプリURL</span></label><input id="gasUrl" type="text" placeholder="https://script.google.com/macros/s/.../exec"></div>
+      <div class="fld" style="grid-column:1/-1"><label>合言葉（トークン） <span class="u">GASのsetupで発行される</span></label><input id="gasToken" type="text" placeholder="RELAY_TOKEN"></div>
+    </div>
+    <div class="row-actions">
+      <button class="btn-main" id="btnFetch">今すぐ最新を取込む</button>
+      <button class="btn-sub" id="btnSaveConn">設定を保存</button>
+      <span id="fetchMsg" style="font-size:12px;color:var(--muted);align-self:center"></span>
+    </div>
+  </section>
 
   <!-- INPUT -->
   <section class="panel">
     <h2>① 数字を入れる <span class="tag">入れた瞬間に自動更新</span></h2>
-    <p class="sub">広告レポートとプロラインから拾った今月の数字を入れてね。単価は変えられます（デフォルト54万）。</p>
+    <p class="sub">自動取込が動けば埋まります。手で直してもOK。単価は変えられます（デフォルト54万）。</p>
     <div class="grid" id="inputs">
-      <div class="fld"><label>月ラベル <span class="u">任意</span></label><input id="i_month" type="text" inputmode="text" placeholder="2026-07"></div>
+      <div class="grouphd">広告（Meta/媒体）</div>
+      <div class="fld"><label>月ラベル <span class="u">任意</span></label><input id="i_month" type="text" placeholder="2026-07"></div>
       <div class="fld"><label>広告費 <span class="u">円</span></label><input id="i_cost" type="number" inputmode="numeric" placeholder="1000000"></div>
+      <div class="fld"><label>表示回数(IMP) <span class="u">回</span></label><input id="i_imp" type="number" inputmode="numeric" placeholder=""></div>
+      <div class="fld"><label>クリック(CT) <span class="u">回</span></label><input id="i_ct" type="number" inputmode="numeric" placeholder=""></div>
       <div class="fld"><label>媒体CV <span class="u">件</span></label><input id="i_cv" type="number" inputmode="numeric" placeholder="広告管理画面のCV"></div>
-      <div class="fld"><label>LINE登録実数 <span class="u">件</span></label><input id="i_reg" type="number" inputmode="numeric" placeholder="プロライン実登録"></div>
+      <div class="grouphd">プロライン（広告用）</div>
+      <div class="fld"><label>LINE登録実数 <span class="u">件</span></label><input id="i_reg" type="number" inputmode="numeric" placeholder=""></div>
       <div class="fld"><label>動画①完走 <span class="u">件</span></label><input id="i_v1" type="number" inputmode="numeric" placeholder=""></div>
       <div class="fld"><label>動画②完走 <span class="u">件</span></label><input id="i_v2" type="number" inputmode="numeric" placeholder=""></div>
       <div class="fld"><label>動画③完走 <span class="u">件</span></label><input id="i_v3" type="number" inputmode="numeric" placeholder=""></div>
       <div class="fld"><label>面談予約 <span class="u">件</span></label><input id="i_book" type="number" inputmode="numeric" placeholder=""></div>
+      <div class="grouphd">面談・成約</div>
       <div class="fld"><label>面談実施 <span class="u">件</span></label><input id="i_meet" type="number" inputmode="numeric" placeholder=""></div>
       <div class="fld"><label>成約 <span class="u">件</span></label><input id="i_win" type="number" inputmode="numeric" placeholder=""></div>
       <div class="fld"><label>単価 <span class="u">円</span></label><input id="i_price" type="number" inputmode="numeric" placeholder="540000"></div>
@@ -135,19 +155,26 @@
       <button class="btn-sub" id="btnImport">読み込み</button>
       <input type="file" id="fileImport" accept="application/json" style="display:none">
     </div>
-    <div class="lock">🔒 入れた数字はこの端末（ブラウザ）の中だけに保存され、どこにも送信されません。URLを他の人が開いても空の状態で開きます。社外秘の数字も安心して入れてOK。</div>
+    <div class="lock">🔒 入れた数字はこの端末（ブラウザ）の中だけに保存され、公開されません。URLを他の人が開いても空で開きます。</div>
   </section>
 
   <!-- VERDICT -->
   <div id="verdict" class="verdict miss">
-    <div class="big" id="vRoas">ROAS —<small id="vRoasSub"></small></div>
+    <div class="big" id="vRoas">ROAS —</div>
     <div class="line" id="vLine">数字を入れると、ここに今のROASと目標までの距離が出ます。</div>
   </div>
 
-  <!-- KPI cards -->
+  <!-- 媒体指標（元シート風） -->
   <section class="panel">
-    <h2>② 主要指標</h2>
-    <div class="kpis" id="kpis"></div>
+    <h2>② 広告の効率（媒体指標）<span class="tag">元レポートと同じ並び</span></h2>
+    <p class="sub">用語がわからなければ、各数字の <span class="q">?</span> にふれてね。下に用語解説もあります。</p>
+    <div class="kpis" id="mediaKpis"></div>
+  </section>
+
+  <!-- ファネル指標 -->
+  <section class="panel">
+    <h2>③ ファネルの数字</h2>
+    <div class="kpis" id="funnelKpis"></div>
   </section>
 
   <!-- Bottleneck -->
@@ -159,21 +186,36 @@
 
   <!-- Levers -->
   <section class="panel">
-    <h2>③ 3大レバー診断 <span class="tag">何がダメで何を直すか</span></h2>
-    <p class="sub">ROAS＝単価÷CPO。CPOを決めるのは「実CPA・面談到達率・面談成約率」の3つだけ。ここを1つずつ見る。</p>
+    <h2>④ 3大レバー診断 <span class="tag">何がダメで何を直すか</span></h2>
+    <p class="sub">ROAS＝単価÷CPO。CPOを決めるのは「実CPA・面談到達率・面談成約率」の3つだけ。</p>
     <div id="levers"></div>
   </section>
 
   <!-- Goal seek -->
   <section class="panel">
-    <h2>④ ROAS500%への逆算</h2>
+    <h2>⑤ ROAS500%への逆算</h2>
     <p class="sub" id="gsSub">目標に届く組み合わせを自動計算します。</p>
     <div id="goalseek"></div>
   </section>
 
+  <!-- 用語解説 -->
+  <section class="panel">
+    <h2>📖 用語解説（ローマ字3文字がわかるように）</h2>
+    <p class="sub">くみこが専門用語に慣れるまでの早見表。上の数字と同じ言葉です。</p>
+    <details class="glossary" open>
+      <summary>広告の言葉</summary>
+      <div id="glossaryAd"></div>
+    </details>
+    <div style="height:10px"></div>
+    <details class="glossary">
+      <summary>成約・お金の言葉</summary>
+      <div id="glossaryMoney"></div>
+    </details>
+  </section>
+
   <!-- History -->
   <section class="panel">
-    <h2>⑤ 月次の推移</h2>
+    <h2>⑥ 月次の推移</h2>
     <p class="sub">「この月を履歴に保存」を押すと、改善したかが並びます。</p>
     <div class="hist-wrap"><table class="hist" id="histTable"><thead></thead><tbody></tbody></table></div>
     <div class="row-actions"><button class="btn-sub" id="btnClearHist">履歴を全消去</button></div>
@@ -185,308 +227,231 @@
 <script>
 (function(){
   "use strict";
-  var DEBUG = /[?&]debug=1/.test(location.search);
-  function showErr(msg){
-    try{
-      var b=document.getElementById('errbox');
-      b.style.display='block';
-      b.textContent='⚠ 表示エラー: '+msg+'（?debug=1 で詳細）';
-    }catch(e){}
-  }
-  window.addEventListener('error',function(e){ showErr(e.message); });
+  var DEBUG=/[?&]debug=1/.test(location.search);
+  function showErr(m){try{var b=document.getElementById('errbox');b.style.display='block';b.textContent='⚠ 表示エラー: '+m+'（?debug=1 で詳細）';}catch(e){}}
+  window.addEventListener('error',function(e){showErr(e.message);});
 
-  // ---- constants (この会話で確定した目標値) ----
-  var TARGET_CPA = 3300;        // 実CPA目標（円）
-  var CLOSE_STRONG = 55;        // 面談成約率の到達圏（%）
-  var CLOSE_FLOOR = 50;         // 面談成約率これ以上なら強み
-  var STORE = 'roas_dash_v1';
-  var HIST = 'roas_dash_hist_v1';
+  var TARGET_CPA=3300, CLOSE_STRONG=55, CLOSE_FLOOR=50;
+  var STORE='roas_dash_v2', HIST='roas_dash_hist_v2', CONN='roas_dash_conn_v1';
+  var FIELDS=['month','cost','imp','ct','cv','reg','v1','v2','v3','book','meet','win','price','troas'];
+  var el=function(id){return document.getElementById(id);};
+  var inp=function(f){return el('i_'+f);};
+  function num(f){var v=parseFloat(inp(f).value);return isFinite(v)?v:0;}
+  function yen(n){if(!isFinite(n))return'—';return'¥'+Math.round(n).toLocaleString('ja-JP');}
+  function pct(n,d){if(!isFinite(n))return'—';return n.toFixed(d==null?1:d)+'%';}
+  function div(a,b){return(b>0)?a/b:NaN;}
 
-  var FIELDS = ['month','cost','cv','reg','v1','v2','v3','book','meet','win','price','troas'];
-  function el(id){ return document.getElementById(id); }
-  function inp(f){ return el('i_'+f); }
-  function num(f){ var v=parseFloat(inp(f).value); return isFinite(v)?v:0; }
-  function yen(n){ if(!isFinite(n)) return '—'; return '¥'+Math.round(n).toLocaleString('ja-JP'); }
-  function pct(n,d){ if(!isFinite(n)) return '—'; return n.toFixed(d==null?1:d)+'%'; }
-  function div(a,b){ return (b>0)? a/b : NaN; }
+  // ---- 用語データ ----
+  var GLOSSARY={
+    ad:[
+      ['CPA','シーピーエー','登録1人を集めるのにかかった広告費','広告10万円で登録30人なら CPA＝3,333円。安いほど良い。'],
+      ['実CPA','じつシーピーエー','プロラインで"実際に"登録された人数で割ったCPA','広告管理画面の数より正確。ダッシュボードはこちを重視。'],
+      ['媒体CPA','ばいたいシーピーエー','広告管理画面(Meta)がカウントしたCV数で割ったCPA','実CPAより少し甘めに出やすい。'],
+      ['CPM','シーピーエム','広告が1,000回表示されるのにかかった費用','広告枠の"仕入れ値"。高い＝競争が激しい。'],
+      ['CTR','シーティーアール','表示された人のうちクリックした割合','バナー・動画の"つかみ"の強さ。低い＝クリエイティブ改善。'],
+      ['CPC','シーピーシー','1クリックあたりの費用','CTRが上がるとCPCは下がる。'],
+      ['CVR','シーブイアール','クリックした人のうち登録した割合','LP(ランディングページ)の説得力。低い＝LP改善。'],
+      ['CV','シーブイ','コンバージョン＝成果の件数','ここでは「広告→登録」の件数。'],
+      ['IMP','インプレッション','広告が表示された回数','']
+    ],
+    money:[
+      ['CPO','シーピーオー','成約1件あたりにかかった広告費','ROASの心臓。CPO＝実CPA÷流入→成約率。目標は¥108,000以下(単価54万時)。'],
+      ['ROAS','ロアス','広告費に対して何倍の売上が返ったか','500%＝広告1円で売上5円。ROAS＝単価÷CPO。'],
+      ['LTV','エルティーブイ','顧客1人が生涯に払ってくれる総額','分割・継続を含めると本当の価値が見える。'],
+      ['実CPA','じつシーピーエー','登録1人あたりの広告費（再掲）','¥3,300台に戻すのがROAS500%の必要条件。'],
+      ['面談到達率','—','登録した人のうち面談まで来た割合','今回の新フロー最大の勝負どころ（温度）。'],
+      ['面談成約率','—','面談した人のうち成約した割合','50〜60%あれば強み。維持でOK。'],
+      ['流入→成約率','—','登録した人のうち最終的に成約した割合','面談到達率×面談成約率。']
+    ]
+  };
+  var TIP={};
+  ['ad','money'].forEach(function(k){GLOSSARY[k].forEach(function(t){TIP[t[0]]=t[2]+(t[3]?'（例：'+t[3]+'）':'');});});
 
-  // ---- persistence ----
-  function saveInputs(){
-    try{
-      var o={}; FIELDS.forEach(function(f){ o[f]=inp(f).value; });
-      localStorage.setItem(STORE, JSON.stringify(o));
-    }catch(e){ if(DEBUG) showErr('save '+e.message); }
-  }
-  function loadInputs(){
-    try{
-      var raw=localStorage.getItem(STORE); if(!raw) return;
-      var o=JSON.parse(raw);
-      FIELDS.forEach(function(f){ if(o[f]!=null) inp(f).value=o[f]; });
-    }catch(e){ if(DEBUG) showErr('load '+e.message); }
-  }
-
-  // ---- core compute ----
   function compute(){
-    var cost=num('cost'), cv=num('cv'), reg=num('reg'),
-        v1=num('v1'), v2=num('v2'), v3=num('v3'),
-        book=num('book'), meet=num('meet'), win=num('win'),
-        price=num('price')||540000, troas=num('troas')||500;
-
-    var m={
-      cost:cost, reg:reg, win:win, price:price, troas:troas,
-      cpa: div(cost,reg),                    // 実CPA
-      cvToReg: div(reg,cv)*100,              // CV→登録率
-      v3rate: div(v3,reg)*100,               // 登録→動画3完走率（温度指標）
-      bookRate: div(book,reg)*100,           // 登録→面談予約率
-      meetRate: div(meet,book)*100,          // 面談予約→実施率
-      closeRate: div(win,meet)*100,          // 面談成約率
-      reach: div(meet,reg)*100,              // 面談到達率（登録→面談実施）
-      flowWin: div(win,reg)*100,             // 流入→成約率
-      cpo: div(cost,win),                    // CPO
-      sales: win*price,
-      roas: div(win*price,cost)*100          // ROAS
-    };
-    // 目標CPO（単価×100/目標ROAS）
-    m.cpoTarget = price*(100/troas);
-    // 目標CPO達成に必要な「流入→成約率」（現状実CPAで）
-    m.needFlowWin = (m.cpa>0 && isFinite(m.cpa)) ? (m.cpa/m.cpoTarget)*100 : NaN;
-    // 目標実CPA(3300)前提で必要な流入→成約率
-    m.needFlowWinIdeal = (TARGET_CPA/m.cpoTarget)*100;
-    // 面談成約率を現状維持したときに必要な面談到達率（理想実CPA前提）
-    var closeUse = isFinite(m.closeRate)&&m.closeRate>0 ? m.closeRate : CLOSE_STRONG;
-    m.closeUse = closeUse;
-    m.needReachIdeal = m.needFlowWinIdeal / (closeUse/100);   // %
-    m.needReachNow   = isFinite(m.needFlowWin)? m.needFlowWin/(closeUse/100) : NaN;
+    var cost=num('cost'),imp=num('imp'),ct=num('ct'),cv=num('cv'),reg=num('reg'),
+        v1=num('v1'),v2=num('v2'),v3=num('v3'),book=num('book'),meet=num('meet'),win=num('win'),
+        price=num('price')||540000,troas=num('troas')||500;
+    var m={cost:cost,reg:reg,win:win,price:price,troas:troas,
+      cpm:div(cost,imp)*1000, ctr:div(ct,imp)*100, cpc:div(cost,ct),
+      mediaCpa:div(cost,cv), cvr:div(cv,ct)*100, ryunyu:div(reg,cv)*100,
+      cpa:div(cost,reg),
+      v3rate:div(v3,reg)*100, bookRate:div(book,reg)*100, meetRate:div(meet,book)*100,
+      closeRate:div(win,meet)*100, reach:div(meet,reg)*100, flowWin:div(win,reg)*100,
+      cpo:div(cost,win), sales:win*price, roas:div(win*price,cost)*100};
+    m.cpoTarget=price*(100/troas);
+    m.needFlowWinIdeal=(TARGET_CPA/m.cpoTarget)*100;
+    var closeUse=isFinite(m.closeRate)&&m.closeRate>0?m.closeRate:CLOSE_STRONG; m.closeUse=closeUse;
+    m.needReachIdeal=m.needFlowWinIdeal/(closeUse/100);
     return m;
   }
 
-  // ---- render ----
-  function statusFor(kind, m){
-    // returns {cls, label, pctOfTarget(0-1), fix}
-    if(kind==='cpa'){
-      var c=m.cpa;
-      if(!isFinite(c)||m.reg===0) return {cls:'na',label:'データ待ち',ratio:0};
-      var cls = c<=TARGET_CPA?'good': c<=4000?'warn':'bad';
-      var lab = c<=TARGET_CPA?'目標クリア': c<=4000?'あと少し':'要改善';
-      return {cls:cls,label:lab,ratio:Math.min(1,TARGET_CPA/c)};
-    }
-    if(kind==='reach'){
-      var r=m.reach, need=m.needReachIdeal;
-      if(!isFinite(r)||m.reg===0) return {cls:'na',label:'データ待ち',ratio:0};
-      var cls = r>=need?'good': r>=need*0.75?'warn':'bad';
-      var lab = r>=need?'目標クリア': r>=need*0.75?'あと少し':'要改善';
-      return {cls:cls,label:lab,ratio:Math.min(1,r/need)};
-    }
-    if(kind==='close'){
-      var x=m.closeRate;
-      if(!isFinite(x)||num('meet')===0) return {cls:'na',label:'データ待ち',ratio:0};
-      var cls = x>=CLOSE_FLOOR?'good': x>=40?'warn':'bad';
-      var lab = x>=CLOSE_FLOOR?'強み・維持': x>=40?'標準':'要改善';
-      return {cls:cls,label:lab,ratio:Math.min(1,x/CLOSE_STRONG)};
-    }
+  function card(label,val,note,tipKey){
+    var q=tipKey?' <span class="q" data-tip="'+tipKey+'">?</span>':'';
+    return '<div class="kpi"><div class="k">'+label+q+'</div><div class="v">'+val+'</div><div class="t">'+note+'</div></div>';
   }
-
-  function fixText(kind, m){
-    if(kind==='cpa'){
-      return '<b>実CPAを¥3,300台に。</b>予算は上げない（過去3回、増額でCPAが壊れている）。勝ちクリエイティブ(banner025/movie006)＋25〜34歳の安価CPA層に配分。記事LP・登録LPのhttps化を確認。';
-    }
-    if(kind==='reach'){
-      var parts=[];
-      if(isFinite(m.v3rate)&&m.v3rate<40&&num('v3')>=0&&m.reg>0) parts.push('動画完走が細い→1本目を短尺化・感想提出ゲートをスタンプに軽量化・生徒事例を前倒し・広告オプトは「メルカリ橋渡し」を1本目に');
-      if(isFinite(m.bookRate)&&m.bookRate>0&&m.bookRate<8) parts.push('面談予約が弱い→「◯月◯日まで予約で特典」の締切を切る・社会的証明を差し込む');
-      parts.push('オプト別シナリオで温度に合わせる（広告=橋渡しから／アライアンス=既存教育）');
-      return '<b>面談到達率を上げる（＝温度）。</b>'+parts.join('。 ')+'。';
-    }
-    if(kind==='close'){
-      return '<b>面談成約率は通常このフローの強み。</b>50%以上なら維持でOK。落ちている月は面談台本の標準化と録画レビューで底上げ。';
-    }
+  function statusFor(kind,m){
+    if(kind==='cpa'){var c=m.cpa;if(!isFinite(c)||m.reg===0)return{cls:'na',label:'データ待ち',ratio:0};
+      return{cls:c<=TARGET_CPA?'good':c<=4000?'warn':'bad',label:c<=TARGET_CPA?'目標クリア':c<=4000?'あと少し':'要改善',ratio:Math.min(1,TARGET_CPA/c)};}
+    if(kind==='reach'){var r=m.reach,need=m.needReachIdeal;if(!isFinite(r)||m.reg===0)return{cls:'na',label:'データ待ち',ratio:0};
+      return{cls:r>=need?'good':r>=need*0.75?'warn':'bad',label:r>=need?'目標クリア':r>=need*0.75?'あと少し':'要改善',ratio:Math.min(1,r/need)};}
+    if(kind==='close'){var x=m.closeRate;if(!isFinite(x)||num('meet')===0)return{cls:'na',label:'データ待ち',ratio:0};
+      return{cls:x>=CLOSE_FLOOR?'good':x>=40?'warn':'bad',label:x>=CLOSE_FLOOR?'強み・維持':x>=40?'標準':'要改善',ratio:Math.min(1,x/CLOSE_STRONG)};}
   }
-
-  function leverRow(title, valStr, targetStr, kind, m){
-    var s=statusFor(kind,m);
-    var barCls = s.cls==='na'?'':s.cls;
-    var w=Math.round((s.ratio||0)*100);
-    var html='';
-    html+='<div class="lever">';
-    html+= '<div class="hd"><span class="nm">'+title+'</span><span class="st '+s.cls+'">'+s.label+'</span></div>';
-    html+= '<div class="nums">現状 <b>'+valStr+'</b> ／ 目標 '+targetStr+'</div>';
-    html+= '<div class="bar"><i class="'+barCls+'" style="width:'+w+'%"></i></div>';
-    if(s.cls==='bad'||s.cls==='warn') html+= '<div class="fix">'+fixText(kind,m)+'</div>';
-    html+='</div>';
-    return html;
+  function fixText(kind,m){
+    if(kind==='cpa')return'<b>実CPAを¥3,300台に。</b>予算は上げない（過去3回、増額でCPAが壊れている）。勝ちクリエイティブ(banner025/movie006)＋25〜34歳の安価CPA層に配分。LPのhttps化を確認。';
+    if(kind==='reach'){var p=[];
+      if(isFinite(m.v3rate)&&m.v3rate<40&&m.reg>0)p.push('動画完走が細い→1本目を短尺化・感想提出ゲートをスタンプに軽量化・生徒事例を前倒し・広告オプトは「メルカリ橋渡し」を1本目に');
+      if(isFinite(m.bookRate)&&m.bookRate>0&&m.bookRate<8)p.push('面談予約が弱い→「◯月◯日まで予約で特典」の締切を切る・社会的証明を差し込む');
+      p.push('オプト別シナリオで温度に合わせる');return'<b>面談到達率を上げる（＝温度）。</b>'+p.join('。 ')+'。';}
+    if(kind==='close')return'<b>面談成約率は通常このフローの強み。</b>50%以上なら維持でOK。落ちた月は面談台本の標準化と録画レビューで底上げ。';
+  }
+  function leverRow(title,valStr,targetStr,kind,m){
+    var s=statusFor(kind,m),bc=s.cls==='na'?'':s.cls,w=Math.round((s.ratio||0)*100),h='';
+    h+='<div class="lever"><div class="hd"><span class="nm">'+title+'</span><span class="st '+s.cls+'">'+s.label+'</span></div>';
+    h+='<div class="nums">現状 <b>'+valStr+'</b> ／ 目標 '+targetStr+'</div>';
+    h+='<div class="bar"><i class="'+bc+'" style="width:'+w+'%"></i></div>';
+    if(s.cls==='bad'||s.cls==='warn')h+='<div class="fix">'+fixText(kind,m)+'</div>';
+    return h+'</div>';
   }
 
   function render(){
     var m=compute();
-
-    // verdict
-    var vEl=el('verdict'), hit=isFinite(m.roas)&&m.roas>=m.troas;
+    var hit=isFinite(m.roas)&&m.roas>=m.troas, vEl=el('verdict');
     vEl.className='verdict '+(isFinite(m.roas)?(hit?'hit':'miss'):'miss');
     if(isFinite(m.roas)){
-      el('vRoas').innerHTML='ROAS '+Math.round(m.roas)+'%<small>（目標 '+Math.round(m.troas)+'%）</small>';
-      if(hit){
-        el('vLine').innerHTML='目標達成。CPO '+yen(m.cpo)+'（目標 '+yen(m.cpoTarget)+'以下）。この状態を3ヶ月維持してから予算増額を検討。';
-      }else{
-        var gap=m.troas-m.roas;
-        el('vLine').innerHTML='目標まであと <b>'+Math.round(gap)+'ポイント</b>。今のCPOは '+yen(m.cpo)+'（目標 '+yen(m.cpoTarget)+'以下にしたい）。下の3大レバーで、どこを直せば届くかを見て。';
-      }
-    }else{
-      el('vRoas').innerHTML='ROAS —';
-      el('vLine').textContent='広告費・LINE登録実数・成約・単価を入れると、ここに結果が出ます。';
-    }
+      el('vRoas').innerHTML='ROAS '+Math.round(m.roas)+'%<span style="font-size:13px;color:var(--muted);font-weight:600"> （目標 '+Math.round(m.troas)+'%）</span>';
+      el('vLine').innerHTML=hit?('目標達成。CPO '+yen(m.cpo)+'（目標 '+yen(m.cpoTarget)+'以下）。この状態を3ヶ月維持してから予算増額を検討。')
+        :('目標まであと <b>'+Math.round(m.troas-m.roas)+'ポイント</b>。今のCPOは '+yen(m.cpo)+'（目標 '+yen(m.cpoTarget)+'以下にしたい）。下の3大レバーでどこを直せば届くか見てね。');
+    }else{el('vRoas').innerHTML='ROAS —';el('vLine').textContent='広告費・LINE登録実数・成約・単価を入れると、ここに結果が出ます。';}
 
-    // KPI cards
-    var cards=[
-      ['実CPA', yen(m.cpa), 'LINE登録単価'],
-      ['CPO', yen(m.cpo), '成約1件の広告費'],
-      ['面談到達率', pct(m.reach), '登録→面談実施'],
-      ['面談成約率', pct(m.closeRate), '面談→成約'],
-      ['流入→成約率', pct(m.flowWin,2), '登録→成約'],
-      ['動画③完走率', pct(m.v3rate), '登録→動画3完走'],
-      ['売上（試算）', yen(m.sales), '成約×単価'],
-      ['目標CPO', yen(m.cpoTarget), 'ROAS'+Math.round(m.troas)+'%の分岐点']
-    ];
-    el('kpis').innerHTML=cards.map(function(c){
-      return '<div class="kpi"><div class="k">'+c[0]+'</div><div class="v">'+c[1]+'</div><div class="t">'+c[2]+'</div></div>';
-    }).join('');
+    el('mediaKpis').innerHTML=[
+      card('CPM',yen(m.cpm),'表示1,000回の費用','CPM'),
+      card('CTR',pct(m.ctr,2),'クリック率','CTR'),
+      card('CPC',yen(m.cpc),'1クリック単価','CPC'),
+      card('CVR',pct(m.cvr,2),'クリック→登録','CVR'),
+      card('媒体CPA',yen(m.mediaCpa),'管理画面基準','媒体CPA'),
+      card('実CPA',yen(m.cpa),'プロライン実数基準','実CPA'),
+      card('流入率',pct(m.ryunyu),'登録実数÷媒体CV',null),
+      card('目標CPA',yen(TARGET_CPA),'ここまで下げたい','実CPA')
+    ].join('');
 
-    // levers
-    var lv='';
-    lv+=leverRow('① 実CPA（集客効率・広告担当）', yen(m.cpa), '¥3,300以下', 'cpa', m);
-    lv+=leverRow('② 面談到達率（温度・ナーチャリング）', pct(m.reach), (isFinite(m.needReachIdeal)?pct(m.needReachIdeal):'—')+'以上', 'reach', m);
-    lv+=leverRow('③ 面談成約率（クロージング）', pct(m.closeRate), '50%以上を維持', 'close', m);
-    el('levers').innerHTML=lv;
+    el('funnelKpis').innerHTML=[
+      card('登録',isFinite(m.reg)&&m.reg?m.reg.toLocaleString():'—','LINE登録実数',null),
+      card('面談到達率',pct(m.reach),'登録→面談実施','面談到達率'),
+      card('面談成約率',pct(m.closeRate),'面談→成約','面談成約率'),
+      card('流入→成約率',pct(m.flowWin,2),'登録→成約','流入→成約率'),
+      card('CPO',yen(m.cpo),'成約1件の広告費','CPO'),
+      card('売上(試算)',yen(m.sales),'成約×単価',null),
+      card('目標CPO',yen(m.cpoTarget),'ROAS'+Math.round(m.troas)+'%の分岐点','CPO'),
+      card('動画③完走率',pct(m.v3rate),'登録→動画3完走',null)
+    ].join('');
 
-    // bottleneck = 最も目標比が低いレバー（データがある中で）
+    el('levers').innerHTML=
+      leverRow('① 実CPA（集客効率・広告担当）',yen(m.cpa),'¥3,300以下','cpa',m)
+      +leverRow('② 面談到達率（温度・ナーチャリング）',pct(m.reach),(isFinite(m.needReachIdeal)?pct(m.needReachIdeal):'—')+'以上','reach',m)
+      +leverRow('③ 面談成約率（クロージング）',pct(m.closeRate),'50%以上を維持','close',m);
+
     var cand=[
-      {k:'cpa',   s:statusFor('cpa',m),   nm:'実CPA（集客効率）', d:'広告の登録単価が高い。ここが高いと、後段をどれだけ頑張ってもROASが伸びない。予算を上げずに勝ちクリエイティブへ寄せる。'},
-      {k:'reach', s:statusFor('reach',m), nm:'面談到達率（温度）', d:'登録した人を面談席まで運べていない。動画が重い・締切がない・温度ゼロのまま。ここが今回の新フロー最大の勝負どころ。'},
-      {k:'close', s:statusFor('close',m), nm:'面談成約率（クロージング）', d:'面談での決定率が落ちている。通常はこのフローの強みなので、台本標準化で戻す。'}
-    ].filter(function(c){ return c.s.cls!=='na'; });
-    if(cand.length){
-      cand.sort(function(a,b){ return (a.s.ratio||0)-(b.s.ratio||0); });
-      var worst=cand[0];
-      if(worst.s.cls==='good'){
-        el('bottleneck').style.display='block';
-        el('bnName').textContent='大きな穴なし';
-        el('bnDesc').textContent='3大レバーとも目標圏。あとは母数（広告費）を保ったまま横に伸ばす段階。';
-      }else{
-        el('bottleneck').style.display='block';
-        el('bnName').textContent=worst.nm;
-        el('bnDesc').textContent=worst.d;
-      }
-    }else{
-      el('bottleneck').style.display='none';
-    }
+      {k:'cpa',s:statusFor('cpa',m),nm:'実CPA（集客効率）',d:'広告の登録単価が高い。ここが高いと後段をどれだけ頑張ってもROASが伸びない。予算を上げずに勝ちクリエイティブへ寄せる。'},
+      {k:'reach',s:statusFor('reach',m),nm:'面談到達率（温度）',d:'登録した人を面談席まで運べていない。動画が重い・締切がない・温度ゼロのまま。今回の新フロー最大の勝負どころ。'},
+      {k:'close',s:statusFor('close',m),nm:'面談成約率（クロージング）',d:'面談での決定率が落ちている。通常はこのフローの強みなので台本標準化で戻す。'}
+    ].filter(function(c){return c.s.cls!=='na';});
+    if(cand.length){cand.sort(function(a,b){return(a.s.ratio||0)-(b.s.ratio||0);});var w=cand[0];el('bottleneck').style.display='block';
+      if(w.s.cls==='good'){el('bnName').textContent='大きな穴なし';el('bnDesc').textContent='3大レバーとも目標圏。あとは母数（広告費）を保ったまま横に伸ばす段階。';}
+      else{el('bnName').textContent=w.nm;el('bnDesc').textContent=w.d;}
+    }else el('bottleneck').style.display='none';
 
-    // goal seek
     var gs='';
     if(isFinite(m.cpoTarget)){
-      gs+='<div class="hint">';
-      gs+='ROAS'+Math.round(m.troas)+'%＝CPO <b>'+yen(m.cpoTarget)+'以下</b>（単価'+yen(m.price)+'）。CPO＝実CPA÷流入→成約率。';
-      gs+='</div>';
-      // 表：実CPA別に必要な流入→成約率／面談到達率
-      var rows=[3000,3300,3500,4000];
-      if(isFinite(m.cpa)&&m.cpa>0){ rows.push(Math.round(m.cpa)); }
+      gs+='<div class="hint">ROAS'+Math.round(m.troas)+'%＝CPO <b>'+yen(m.cpoTarget)+'以下</b>（単価'+yen(m.price)+'）。CPO＝実CPA÷流入→成約率。</div>';
+      var rows=[3000,3300,3500,4000];if(isFinite(m.cpa)&&m.cpa>0)rows.push(Math.round(m.cpa));
       rows=rows.filter(function(v,i,a){return a.indexOf(v)===i;}).sort(function(a,b){return a-b;});
       gs+='<div class="hist-wrap"><table class="hist"><thead><tr><th>実CPA</th><th>必要 流入→成約率</th><th>必要 面談到達率<br><small>成約率'+Math.round(m.closeUse)+'%前提</small></th><th>登録100人あたり面談</th></tr></thead><tbody>';
-      rows.forEach(function(cpa){
-        var need=(cpa/m.cpoTarget)*100;
-        var reachNeed=need/(m.closeUse/100);
-        var per100=reachNeed;
-        var isNow=(isFinite(m.cpa)&&Math.round(m.cpa)===cpa);
-        gs+='<tr'+(isNow?' style="background:#FFF6E8"':'')+'><td>'+yen(cpa)+(isNow?' <small>今</small>':'')+'</td><td>'+need.toFixed(2)+'%</td><td>'+reachNeed.toFixed(1)+'%</td><td>約'+Math.round(per100)+'人</td></tr>';
-      });
+      rows.forEach(function(cpa){var need=(cpa/m.cpoTarget)*100,rn=need/(m.closeUse/100),isNow=isFinite(m.cpa)&&Math.round(m.cpa)===cpa;
+        gs+='<tr'+(isNow?' style="background:#FFF6E8"':'')+'><td>'+yen(cpa)+(isNow?' <small>今</small>':'')+'</td><td>'+need.toFixed(2)+'%</td><td>'+rn.toFixed(1)+'%</td><td>約'+Math.round(rn)+'人</td></tr>';});
       gs+='</tbody></table></div>';
-      // 一文サマリ
-      if(isFinite(m.reach)&&m.reg>0){
-        var okReach=m.needReachIdeal;
-        gs+='<div class="fix" style="margin-top:12px"><b>今の面談成約率'+Math.round(m.closeUse)+'%を維持</b>して、実CPAを¥3,300に、面談到達率を <b>'+m.reach.toFixed(1)+'% → '+okReach.toFixed(1)+'%</b> にすれば、ROAS'+Math.round(m.troas)+'%が射程に入ります。';
-        var deltaReg=(okReach-m.reach);
-        if(deltaReg>0) gs+='（登録100人あたり、面談を約'+(deltaReg).toFixed(1)+'人ぶん増やす）';
-        gs+='</div>';
-      }
-    }else{
-      gs='<div class="hint">単価と目標ROASを入れると、逆算表が出ます。</div>';
-    }
+      if(isFinite(m.reach)&&m.reg>0){var ok=m.needReachIdeal;
+        gs+='<div class="fix" style="margin-top:12px"><b>今の面談成約率'+Math.round(m.closeUse)+'%を維持</b>して、実CPAを¥3,300に、面談到達率を <b>'+m.reach.toFixed(1)+'% → '+ok.toFixed(1)+'%</b> にすれば、ROAS'+Math.round(m.troas)+'%が射程に入ります。</div>';}
+    }else gs='<div class="hint">単価と目標ROASを入れると、逆算表が出ます。</div>';
     el('goalseek').innerHTML=gs;
 
     saveInputs();
   }
 
-  // ---- history ----
-  function getHist(){ try{ return JSON.parse(localStorage.getItem(HIST)||'[]'); }catch(e){ return []; } }
-  function setHist(a){ try{ localStorage.setItem(HIST, JSON.stringify(a)); }catch(e){} }
-  function renderHist(){
-    var a=getHist(), t=el('histTable');
-    var cols=['月','広告費','実CPA','面談到達率','面談成約率','CPO','ROAS'];
-    t.querySelector('thead').innerHTML='<tr>'+cols.map(function(c){return '<th>'+c+'</th>';}).join('')+'</tr>';
-    if(!a.length){ t.querySelector('tbody').innerHTML='<tr><td colspan="7" style="color:#6C7C8C;text-align:center">まだ履歴なし</td></tr>'; return; }
-    t.querySelector('tbody').innerHTML=a.map(function(r){
-      return '<tr><td>'+(r.month||'—')+'</td><td>'+yen(r.cost)+'</td><td>'+yen(r.cpa)+'</td><td>'+pct(r.reach)+'</td><td>'+pct(r.closeRate)+'</td><td>'+yen(r.cpo)+'</td><td>'+(isFinite(r.roas)?Math.round(r.roas)+'%':'—')+'</td></tr>';
-    }).join('');
-  }
-  function saveSnapshot(){
-    var m=compute();
-    var snap={month:inp('month').value||('#'+(getHist().length+1)), cost:m.cost, cpa:m.cpa, reach:m.reach, closeRate:m.closeRate, cpo:m.cpo, roas:m.roas};
-    var a=getHist();
-    var i=a.findIndex(function(r){return r.month===snap.month;});
-    if(i>=0) a[i]=snap; else a.push(snap);
-    setHist(a); renderHist();
+  // ---- glossary render ----
+  function renderGlossary(){
+    function block(arr){return arr.map(function(t){
+      return '<div class="term"><div class="h"><b>'+t[0]+'</b>　'+(t[1]!=='—'?'('+t[1]+')':'')+'</div><div class="d">'+t[2]+'</div>'+(t[3]?'<div class="e">例：'+t[3]+'</div>':'')+'</div>';
+    }).join('');}
+    el('glossaryAd').innerHTML=block(GLOSSARY.ad);
+    el('glossaryMoney').innerHTML=block(GLOSSARY.money);
   }
 
-  // ---- events ----
+  // ---- tooltip ----
+  function bindTips(){
+    var tip=el('tip');
+    document.addEventListener('mouseover',function(e){var q=e.target.closest('.q');if(q){var k=q.getAttribute('data-tip');if(TIP[k]){tip.textContent=k+'：'+TIP[k];tip.style.display='block';var r=q.getBoundingClientRect();tip.style.left=Math.min(window.innerWidth-270,r.left)+'px';tip.style.top=(r.bottom+6)+'px';}}});
+    document.addEventListener('mouseout',function(e){if(e.target.closest('.q'))tip.style.display='none';});
+    document.addEventListener('click',function(e){var q=e.target.closest('.q');if(q){var k=q.getAttribute('data-tip');if(TIP[k]){tip.textContent=k+'：'+TIP[k];tip.style.display=tip.style.display==='block'?'none':'block';var r=q.getBoundingClientRect();tip.style.left=Math.min(window.innerWidth-270,r.left)+'px';tip.style.top=(r.bottom+6)+'px';}}else if(!e.target.closest('#tip'))tip.style.display='none';});
+  }
+
+  // ---- persistence ----
+  function saveInputs(){try{var o={};FIELDS.forEach(function(f){o[f]=inp(f).value;});localStorage.setItem(STORE,JSON.stringify(o));}catch(e){}}
+  function loadInputs(){try{var r=localStorage.getItem(STORE);if(!r)return;var o=JSON.parse(r);FIELDS.forEach(function(f){if(o[f]!=null)inp(f).value=o[f];});}catch(e){}}
+  function saveConn(){try{localStorage.setItem(CONN,JSON.stringify({url:el('gasUrl').value.trim(),token:el('gasToken').value.trim()}));}catch(e){}}
+  function loadConn(){try{var r=localStorage.getItem(CONN);if(!r)return;var o=JSON.parse(r);el('gasUrl').value=o.url||'';el('gasToken').value=o.token||'';}catch(e){}}
+
+  // ---- auto fetch from GAS ----
+  function applyData(d){
+    var map={month:'month',cost:'cost',imp:'imp',clicks:'ct',ct:'ct',media_cv:'cv',cv:'cv',reg:'reg',v1:'v1',v2:'v2',v3:'v3',book:'book',meet:'meet',win:'win',price:'price'};
+    Object.keys(map).forEach(function(k){if(d[k]!=null&&d[k]!=='')inp(map[k]).value=d[k];});
+    render();
+    el('srcBadge').className='src auto';el('srcBadge').textContent='自動取込';
+  }
+  function fetchLatest(){
+    var url=el('gasUrl').value.trim(),token=el('gasToken').value.trim();
+    if(!url||!token){el('fetchMsg').textContent='URLと合言葉を入れてね';return;}
+    saveConn();el('fetchMsg').textContent='取込中…';
+    var u=url+(url.indexOf('?')>=0?'&':'?')+'token='+encodeURIComponent(token);
+    fetch(u).then(function(r){return r.json();}).then(function(j){
+      if(j&&j.ok===false){el('fetchMsg').textContent='認証エラー（合言葉を確認）';return;}
+      var d=j.data||j;applyData(d);
+      el('fetchMsg').textContent='取込みました（'+(d.date||d.month||'最新')+'）';
+    }).catch(function(e){el('fetchMsg').textContent='取込失敗：'+String(e).slice(0,40)+'（初回はGASのデプロイ設定を確認）';});
+  }
+
+  // ---- history ----
+  function getHist(){try{return JSON.parse(localStorage.getItem(HIST)||'[]');}catch(e){return[];}}
+  function setHist(a){try{localStorage.setItem(HIST,JSON.stringify(a));}catch(e){}}
+  function renderHist(){var a=getHist(),t=el('histTable'),cols=['月','広告費','実CPA','面談到達率','面談成約率','CPO','ROAS'];
+    t.querySelector('thead').innerHTML='<tr>'+cols.map(function(c){return'<th>'+c+'</th>';}).join('')+'</tr>';
+    if(!a.length){t.querySelector('tbody').innerHTML='<tr><td colspan="7" style="color:#6C7C8C;text-align:center">まだ履歴なし</td></tr>';return;}
+    t.querySelector('tbody').innerHTML=a.map(function(r){return'<tr><td>'+(r.month||'—')+'</td><td>'+yen(r.cost)+'</td><td>'+yen(r.cpa)+'</td><td>'+pct(r.reach)+'</td><td>'+pct(r.closeRate)+'</td><td>'+yen(r.cpo)+'</td><td>'+(isFinite(r.roas)?Math.round(r.roas)+'%':'—')+'</td></tr>';}).join('');}
+  function saveSnapshot(){var m=compute(),snap={month:inp('month').value||('#'+(getHist().length+1)),cost:m.cost,cpa:m.cpa,reach:m.reach,closeRate:m.closeRate,cpo:m.cpo,roas:m.roas};
+    var a=getHist(),i=a.findIndex(function(r){return r.month===snap.month;});if(i>=0)a[i]=snap;else a.push(snap);setHist(a);renderHist();}
+
   function bind(){
-    FIELDS.forEach(function(f){ inp(f).addEventListener('input', render); });
-    el('btnSave').addEventListener('click', saveSnapshot);
-    el('btnClear').addEventListener('click', function(){
-      if(!confirm('入力欄を空にします（履歴は残ります）。よろしいですか？')) return;
-      FIELDS.forEach(function(f){ inp(f).value=''; }); render();
-    });
-    el('btnClearHist').addEventListener('click', function(){
-      if(!confirm('月次履歴を全部消します。よろしいですか？')) return;
-      setHist([]); renderHist();
-    });
-    el('btnSample').addEventListener('click', function(){
-      var s={month:'サンプル',cost:1000000,cv:600,reg:300,v1:90,v2:45,v3:30,book:14,meet:12,win:6,price:540000,troas:500};
-      FIELDS.forEach(function(f){ if(s[f]!=null) inp(f).value=s[f]; }); render();
-    });
-    el('btnExport').addEventListener('click', function(){
-      var data={inputs:{},hist:getHist()};
-      FIELDS.forEach(function(f){ data.inputs[f]=inp(f).value; });
-      var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
-      var url=URL.createObjectURL(blob), a=document.createElement('a');
-      a.href=url; a.download='roas-dashboard-backup.json'; a.click();
-      setTimeout(function(){URL.revokeObjectURL(url);},1000);
-    });
-    el('btnImport').addEventListener('click', function(){ el('fileImport').click(); });
-    el('fileImport').addEventListener('change', function(e){
-      var f=e.target.files[0]; if(!f) return;
-      var rd=new FileReader();
-      rd.onload=function(){
-        try{
-          var d=JSON.parse(rd.result);
-          if(d.inputs) FIELDS.forEach(function(k){ if(d.inputs[k]!=null) inp(k).value=d.inputs[k]; });
-          if(d.hist) setHist(d.hist);
-          render(); renderHist();
-          alert('読み込みました。');
-        }catch(err){ alert('ファイルを読めませんでした。'); }
-      };
-      rd.readAsText(f);
-    });
+    FIELDS.forEach(function(f){inp(f).addEventListener('input',render);});
+    el('btnFetch').addEventListener('click',fetchLatest);
+    el('btnSaveConn').addEventListener('click',function(){saveConn();el('fetchMsg').textContent='設定を保存しました';});
+    el('btnSave').addEventListener('click',saveSnapshot);
+    el('btnClear').addEventListener('click',function(){if(!confirm('入力欄を空にします（履歴は残ります）。よろしいですか？'))return;FIELDS.forEach(function(f){inp(f).value='';});el('srcBadge').className='src manual';el('srcBadge').textContent='手入力';render();});
+    el('btnClearHist').addEventListener('click',function(){if(!confirm('月次履歴を全部消します。よろしいですか？'))return;setHist([]);renderHist();});
+    el('btnSample').addEventListener('click',function(){var s={month:'サンプル',cost:1000000,imp:500000,ct:8000,cv:600,reg:300,v1:90,v2:45,v3:30,book:14,meet:12,win:6,price:540000,troas:500};FIELDS.forEach(function(f){if(s[f]!=null)inp(f).value=s[f];});render();});
+    el('btnExport').addEventListener('click',function(){var data={inputs:{},hist:getHist()};FIELDS.forEach(function(f){data.inputs[f]=inp(f).value;});var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});var url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='roas-dashboard-backup.json';a.click();setTimeout(function(){URL.revokeObjectURL(url);},1000);});
+    el('btnImport').addEventListener('click',function(){el('fileImport').click();});
+    el('fileImport').addEventListener('change',function(e){var f=e.target.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){try{var d=JSON.parse(rd.result);if(d.inputs)FIELDS.forEach(function(k){if(d.inputs[k]!=null)inp(k).value=d.inputs[k];});if(d.hist)setHist(d.hist);render();renderHist();alert('読み込みました。');}catch(err){alert('ファイルを読めませんでした。');}};rd.readAsText(f);});
   }
 
   function boot(){
     try{
-      el('ver').textContent='v20260726a';
-      loadInputs(); bind(); render(); renderHist();
-    }catch(e){
-      showErr(e.message);
-      // 失敗しても入力欄は生きているので真っ白にはしない
-    }
+      el('ver').textContent='v20260727a';
+      loadInputs();loadConn();renderGlossary();bind();bindTips();render();renderHist();
+      // 接続設定済みなら起動時に自動取込を試みる
+      if(el('gasUrl').value.trim()&&el('gasToken').value.trim()){try{fetchLatest();}catch(e){}}
+    }catch(e){showErr(e.message);}
   }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot);
-  else boot();
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 })();
 </script>
 </body>
