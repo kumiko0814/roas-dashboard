@@ -233,6 +233,9 @@
 
   var TARGET_CPA=3300, CLOSE_STRONG=55, CLOSE_FLOOR=50;
   var STORE='roas_dash_v2', HIST='roas_dash_hist_v2', CONN='roas_dash_conn_v1';
+  // 自動取込のデフォルト接続先（GAS中継・毎朝プロライン広告用の数字が入る）
+  var DEFAULT_URL='https://script.google.com/macros/s/AKfycbx1fDt1Ublc5vEFp4QZvUbDw9axRo2SS0KwrEC37nPI5deFQMr-svy1a4sR7F9-IGvU/exec';
+  var DEFAULT_TOKEN=''; // 合言葉は公開リポジトリに置かない。初回だけダッシュボードで入力→localStorageに保存
   var FIELDS=['month','cost','imp','ct','cv','reg','v1','v2','v3','book','meet','win','price','troas'];
   var el=function(id){return document.getElementById(id);};
   var inp=function(f){return el('i_'+f);};
@@ -399,7 +402,7 @@
   function saveInputs(){try{var o={};FIELDS.forEach(function(f){o[f]=inp(f).value;});localStorage.setItem(STORE,JSON.stringify(o));}catch(e){}}
   function loadInputs(){try{var r=localStorage.getItem(STORE);if(!r)return;var o=JSON.parse(r);FIELDS.forEach(function(f){if(o[f]!=null)inp(f).value=o[f];});}catch(e){}}
   function saveConn(){try{localStorage.setItem(CONN,JSON.stringify({url:el('gasUrl').value.trim(),token:el('gasToken').value.trim()}));}catch(e){}}
-  function loadConn(){try{var r=localStorage.getItem(CONN);if(!r)return;var o=JSON.parse(r);el('gasUrl').value=o.url||'';el('gasToken').value=o.token||'';}catch(e){}}
+  function loadConn(){try{var r=localStorage.getItem(CONN);var o=r?JSON.parse(r):{};el('gasUrl').value=o.url||DEFAULT_URL;el('gasToken').value=o.token||DEFAULT_TOKEN;}catch(e){el('gasUrl').value=DEFAULT_URL;el('gasToken').value=DEFAULT_TOKEN;}}
 
   // ---- auto fetch from GAS ----
   function applyData(d){
