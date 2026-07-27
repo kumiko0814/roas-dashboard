@@ -477,20 +477,22 @@
   function sigClass(v,g,w){ if(!isFinite(v))return'na'; return v>=g?'good':(v>=w?'warn':'bad'); }
   function renderCulprit(m){
     var rows=STAGES.map(function(s){var v=s.calc(m);return {s:s,v:v,cls:sigClass(v,s.good,s.warn)};});
-    var culprit=null,pending=null;
+    var firstBad=null,firstBadIdx=-1,firstNa=null,firstNaIdx=-1,warnFirst=null;
     for(var i=0;i<rows.length;i++){
-      if(rows[i].cls==='na'){ pending=rows[i]; break; }   // 上流がデータ待ち→そこで判定保留
-      if(rows[i].cls==='bad'){ culprit=rows[i]; break; }  // 上から最初のbadが主犯
+      if(rows[i].cls==='bad'&&!firstBad){ firstBad=rows[i]; firstBadIdx=i; }
+      if(rows[i].cls==='na'&&!firstNa){ firstNa=rows[i]; firstNaIdx=i; }
+      if(rows[i].cls==='warn'&&!warnFirst){ warnFirst=rows[i]; }
     }
-    var warnFirst=null; for(var j=0;j<rows.length;j++){ if(rows[j].cls==='warn'){ warnFirst=rows[j]; break; } }
     var box;
-    if(culprit){
-      box='<div class="culprit bad"><div class="lbl">主犯（一番の弱点）</div><div class="nm">🔴 '+culprit.s.part+'</div>'
-        +'<div class="dsc">'+culprit.s.diag+'（'+culprit.s.stg+'：<b>'+culprit.v.toFixed(1)+'%</b>／目安 '+culprit.s.good+'%）</div>'
-        +'<div class="fix"><b>次の一手：</b>'+culprit.s.fix+'</div></div>';
-    }else if(pending){
-      box='<div class="culprit warn"><div class="lbl">まだ判定できない</div><div class="nm">⚪️ '+pending.s.part+'から先はデータ待ち</div>'
-        +'<div class="dsc">'+pending.s.stg+'の数字が未入力です。ここが埋まるまで、下流（面談・成約）は正しく判定できません。まず数字を入れてね。</div></div>';
+    if(firstBad){
+      var upNote=(firstNa&&firstNaIdx<firstBadIdx)
+        ? '<div class="dsc" style="margin-top:6px;color:var(--muted)">※上流（'+firstNa.s.part+'）が未入力のため未判定。広告CSVを入れると、さらに上流に真犯人がいないか確認できます。</div>' : '';
+      box='<div class="culprit bad"><div class="lbl">主犯（今わかる範囲で一番の弱点）</div><div class="nm">🔴 '+firstBad.s.part+'</div>'
+        +'<div class="dsc">'+firstBad.s.diag+'（'+firstBad.s.stg+'：<b>'+firstBad.v.toFixed(1)+'%</b>／目安 '+firstBad.s.good+'%）</div>'
+        +'<div class="fix"><b>次の一手：</b>'+firstBad.s.fix+'</div>'+upNote+'</div>';
+    }else if(firstNa){
+      box='<div class="culprit warn"><div class="lbl">まだ判定できない</div><div class="nm">⚪️ '+firstNa.s.part+'から先はデータ待ち</div>'
+        +'<div class="dsc">'+firstNa.s.stg+'の数字が未入力です。まず数字（広告CSVなど）を入れてね。</div></div>';
     }else if(warnFirst){
       box='<div class="culprit warn"><div class="lbl">要注意（あと一歩）</div><div class="nm">🟡 '+warnFirst.s.part+'</div>'
         +'<div class="dsc">'+warnFirst.s.diag+'（'+warnFirst.s.stg+'：<b>'+warnFirst.v.toFixed(1)+'%</b>／目安 '+warnFirst.s.good+'%）</div>'
