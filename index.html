@@ -334,7 +334,8 @@
         price=num('price')||540000,troas=num('troas')||500;
     var m={cost:cost,reg:reg,win:win,price:price,troas:troas,
       cpm:div(cost,imp)*1000, ctr:div(ct,imp)*100, cpc:div(cost,ct),
-      mediaCpa:div(cost,cv), cvr:div(cv,ct)*100, ryunyu:div(reg,cv)*100,
+      mediaCpa:div(cost,cv), cvr:(cv>0?div(cv,ct)*100:NaN), ryunyu:div(reg,cv)*100,
+      cvUnmeasured:(cv<=0 && ct>0),
       cpa:div(cost,reg),
       v3rate:div(v3,reg)*100, bookRate:div(book,reg)*100, meetRate:div(meet,book)*100,
       closeRate:div(win,meet)*100, reach:div(meet,reg)*100, flowWin:div(win,reg)*100,
@@ -485,8 +486,14 @@
     }
     var box;
     if(firstBad){
-      var upNote=(firstNa&&firstNaIdx<firstBadIdx)
-        ? '<div class="dsc" style="margin-top:6px;color:var(--muted)">※上流（'+firstNa.s.part+'）が未入力のため未判定。広告CSVを入れると、さらに上流に真犯人がいないか確認できます。</div>' : '';
+      var upNote='';
+      if(firstNa&&firstNaIdx<firstBadIdx){
+        if(m.cvUnmeasured){
+          upNote='<div class="dsc" style="margin-top:6px;color:var(--bad)">⚠️ Metaが登録（CV）を計測できていません（CSVの結果列が空）。バナーは良好・LPの判定は保留中です。本当のLP評価には、媒体CV欄にプロラインの実登録数を手入力してください。</div>';
+        }else{
+          upNote='<div class="dsc" style="margin-top:6px;color:var(--muted)">※上流（'+firstNa.s.part+'）が未入力のため未判定。広告CSVを入れると、さらに上流に真犯人がいないか確認できます。</div>';
+        }
+      }
       box='<div class="culprit bad"><div class="lbl">主犯（今わかる範囲で一番の弱点）</div><div class="nm">🔴 '+firstBad.s.part+'</div>'
         +'<div class="dsc">'+firstBad.s.diag+'（'+firstBad.s.stg+'：<b>'+firstBad.v.toFixed(1)+'%</b>／目安 '+firstBad.s.good+'%）</div>'
         +'<div class="fix"><b>次の一手：</b>'+firstBad.s.fix+'</div>'+upNote+'</div>';
