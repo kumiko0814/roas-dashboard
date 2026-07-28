@@ -681,6 +681,8 @@
     try{
       el('ver').textContent='v20260727a';
       loadInputs();loadConn();renderGlossary();bind();bindTips();render();renderHist();
+      // 自動取込・手動CSVの設定欄は一番下へ（普段見ないので）
+      try{var wrap=document.querySelector('.wrap'),foot=document.querySelector('.foot');[el('gasUrl'),el('csvBox')].forEach(function(x){if(x){var s=x.closest('section.panel');if(s&&foot)wrap.insertBefore(s,foot);}});}catch(e){}
       // 接続設定済みなら起動時に自動取込を試みる
       if(el('gasUrl').value.trim()&&el('gasToken').value.trim()){try{fetchLatest();}catch(e){}}
     }catch(e){showErr(e.message);}
