@@ -255,6 +255,13 @@
     <div id="creativesBox"><p class="hint">自動取込すると、バナー画像と成績（登録・CTR・CPC）が並びます。</p></div>
   </section>
 
+  <!-- 配信面別 -->
+  <section class="panel">
+    <h2>📱 どこに出てる？（配信面別） <span class="tag">IG/フィード/ストーリー</span></h2>
+    <p class="sub">Meta広告がどの面に流れてるか（自動取込）。<b>消化が多い＝そこに寄ってる</b>。登録が出てる面が稼ぎ頭。</p>
+    <div class="hist-wrap"><table class="hist" id="placementsTable"><thead></thead><tbody></tbody></table></div>
+  </section>
+
   <!-- Bottleneck -->
   <div id="bottleneck" class="bottleneck" style="display:none">
     <div class="lbl">最優先で直すのはここ（3大レバー）</div>
@@ -609,6 +616,18 @@
     }).join('');
   }
 
+  // ---- 配信面別 ----
+  function renderPlacements(list){
+    var t=el('placementsTable'); if(!t) return;
+    if(!list||!list.length) return;
+    t.querySelector('thead').innerHTML='<tr><th>出し先</th><th>配置</th><th>消化</th><th>登録</th><th>CTR</th></tr>';
+    var maxSp=0; list.forEach(function(p){if((p.spend||0)>maxSp)maxSp=p.spend||0;});
+    t.querySelector('tbody').innerHTML=list.map(function(p){
+      var hot=((p.spend||0)===maxSp&&maxSp>0)?' style="background:#E1F0EC"':'';
+      return '<tr'+hot+'><td>'+(p.platform||'')+'</td><td>'+(p.position||'')+'</td><td>¥'+((p.spend||0).toLocaleString('ja-JP'))+'</td><td><b>'+(p.cv||0)+'</b></td><td>'+(p.ctr||0)+'%</td></tr>';
+    }).join('');
+  }
+
   // ---- glossary render ----
   function renderGlossary(){
     function block(arr){return arr.map(function(t){
@@ -638,6 +657,7 @@
     Object.keys(map).forEach(function(k){if(d[k]!=null&&d[k]!=='')inp(map[k]).value=d[k];});
     render();
     renderCreatives(d.creatives);
+    renderPlacements(d.placements);
     el('srcBadge').className='src auto';el('srcBadge').textContent='自動取込';
   }
   function fetchLatest(){
