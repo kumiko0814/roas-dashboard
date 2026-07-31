@@ -302,21 +302,6 @@
     <div id="goalseek"></div>
   </section>
 
-  <!-- 用語解説 -->
-  <section class="panel">
-    <h2>📖 用語解説（ローマ字3文字がわかるように）</h2>
-    <p class="sub">くみこが専門用語に慣れるまでの早見表。上の数字と同じ言葉です。</p>
-    <details class="glossary" open>
-      <summary>広告の言葉</summary>
-      <div id="glossaryAd"></div>
-    </details>
-    <div style="height:10px"></div>
-    <details class="glossary">
-      <summary>成約・お金の言葉</summary>
-      <div id="glossaryMoney"></div>
-    </details>
-  </section>
-
   <!-- DAILY TREND -->
   <section class="panel">
     <h2>📈 広告開始からのデイリー推移 <span class="tag">毎日の変動</span></h2>
@@ -333,6 +318,21 @@
         <button class="btn-sub" id="btnDailyClear">日別データを消去</button>
         <span id="dailyMsg" style="font-size:12px;color:var(--muted);align-self:center"></span>
       </div>
+    </details>
+  </section>
+
+  <!-- 用語解説 -->
+  <section class="panel">
+    <h2>📖 用語解説（ローマ字3文字がわかるように）</h2>
+    <p class="sub">ローマ字3文字の専門用語の早見表。上の数字と同じ言葉です。</p>
+    <details class="glossary" open>
+      <summary>広告の言葉</summary>
+      <div id="glossaryAd"></div>
+    </details>
+    <div style="height:10px"></div>
+    <details class="glossary">
+      <summary>成約・お金の言葉</summary>
+      <div id="glossaryMoney"></div>
     </details>
   </section>
 
@@ -875,7 +875,7 @@
 
   function boot(){
     try{
-      el('ver').textContent='v20260731a';
+      el('ver').textContent='v20260731b';
       loadInputs();loadConn();renderGlossary();bind();bindTips();render();renderHist();renderDaily();
       // 自動取込・手動CSVの設定欄は一番下へ（普段見ないので）
       try{var wrap=document.querySelector('.wrap'),foot=document.querySelector('.foot');[el('gasUrl'),el('csvBox')].forEach(function(x){if(x){var s=x.closest('section.panel');if(s&&foot)wrap.insertBefore(s,foot);}});}catch(e){}
